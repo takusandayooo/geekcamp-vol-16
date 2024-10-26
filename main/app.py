@@ -11,48 +11,57 @@ load_dotenv()
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
+
 
 @app.route("/follow_up", methods=["GET", "POST"])
 def follow_up():
     if request.method == "POST":
         data = request.get_json()
         print(data)
-        result=AI_follow_up_questions(data['result'])
+        result = AI_follow_up_questions(data["result"])
         print(result)
         return jsonify({"status": "success", "result": result})
     else:
         return render_template("follow_up.html")
 
-@app.route('/table', methods=['GET', 'POST'])
+
+@app.route("/table", methods=["GET", "POST"])
 def table():
-    if request.method == 'POScT':
+    if request.method == "POScT":
         data = request.get_json()
         print(data)
-        AI_follow_up_questions(data['result'])
+        AI_follow_up_questions(data["result"])
         return jsonify({"status": "success", "result": data})
 
     else:
-        return render_template('table.html')
+        return render_template("table.html")
 
-@app.route('/group_split', methods=['GET', 'POST'])
+
+@app.route("/group_split", methods=["GET", "POST"])
 def group_split():
-    if request.method == 'GET':
-        return render_template('group_split.html')
+    if request.method == "GET":
+        return render_template("group_split.html")
     else:
         try:
             data = request.get_json()
             intros = Introductions(**data["intros"])
         except ValidationError:
-            abort(500, description="原因不明のエラーが発生しました。時間を空けて実行して下さい。")
+            abort(
+                500,
+                description="原因不明のエラーが発生しました。時間を空けて実行して下さい。",
+            )
 
         groups: Groups | None = split_groups(intros)
         if groups is None:
-            abort(500, description="原因不明のエラーが発生しました。時間を空けて実行して下さい。")
+            abort(
+                500,
+                description="原因不明のエラーが発生しました。時間を空けて実行して下さい。",
+            )
         return jsonify(groups.model_dump())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

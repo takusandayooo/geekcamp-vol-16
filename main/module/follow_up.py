@@ -23,18 +23,17 @@ def AI_follow_up_questions(chat):
 
         自己紹介: [{chat}]
         """
-    completion =client.beta.chat.completions.parse(
+    completion = client.beta.chat.completions.parse(
         model="gpt-4o-mini-2024-07-18",
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt}
+            {"role": "user", "content": prompt},
         ],
         response_format=FollowUpQuestions,
     )
     response_content = completion.choices[0].message.content
     json_data = json.loads(response_content).get("questions")
     return json_data
-
 
 
 if __name__ == "__main__":
