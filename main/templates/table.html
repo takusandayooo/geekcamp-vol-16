@@ -40,16 +40,22 @@
     <script>
         // `localStorage` から音声認識データを取得
         const allResponses = JSON.parse(localStorage.getItem('allResponses')) || [];
+        // allResponsesは配列
+        //   index: ユーザーインデックス
+        //   value: 発言内容のテキストの配列
+        //          ["内容１", "内容２"]
+        print(localStorage.getItem['allResponses'])
 
         // `responseTable` にデータを追加する
         const responseTable = document.getElementById('responseTable');
-        allResponses.forEach((responses, index) => {
+        allResponses.forEach((response, index) => {
             const row = document.createElement('tr');
-            const userCell = document.createElement('td');
+            row.setAttribute('scope', 'row')
+            const userCell = document.createElement('th');
             const responseCell = document.createElement('td');
 
             userCell.textContent = `${index + 1}人目`;
-            responseCell.textContent = responses.join(', ');
+            responseCell.textContent = response.join(', ');
 
             row.appendChild(userCell);
             row.appendChild(responseCell);
