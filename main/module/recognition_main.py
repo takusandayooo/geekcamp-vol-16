@@ -30,8 +30,9 @@ def news_sum(kensaku=''):
         # print('totalResults:', data['totalResults'])
         if data['totalResults'] == 0:
             print('該当する記事がありません')
-            return '該当する記事がありません'
-
+            return ""
+    else:
+        return ""
     news_sum_description = df[['description']]
     news_sumlist = news_sum_description['description'].tolist()
 
