@@ -4,29 +4,33 @@ from pydantic import BaseModel
 
 class Group(BaseModel):
     group_name: str
-    feature: str
-    name: list[str]
+    overview: str
+    usernames: list[str]
 
 
-class Groups(BaseModel):
+class _GroupList(BaseModel):
     groups: list[Group]
 
 
 class Introduction(BaseModel):
-    name: str
-    self_introduction: str
+    username: str
+    content: str
 
 
-class Introductions(BaseModel):
-    self_introductions: list[Introduction]
+class _IntroductionList(BaseModel):
+    introductions: list[Introduction]
 
 
-def split_groups(intros: Introductions) -> Groups | None:
+def split_groups(intros: list[Introduction]) -> list[Group] | None:
+    if len(intros) == 0:
+        return None
+
+    intro_json: str = _IntroductionList(introductions=intros).model_dump_json()
+
     client = OpenAI()
-    intros_json = intros.model_dump_json()
     response = client.beta.chat.completions.parse(
         model="gpt-4o-mini-2024-07-18",
-        response_format=Groups,
+        response_format=_GroupList,
         messages=[
             {
                 "role": "system",
@@ -38,9 +42,12 @@ def split_groups(intros: Introductions) -> Groups | None:
             },
             {
                 "role": "user",
-                "content": intros_json,
+                "content": intro_json,
             },
         ],
     )
 
-    return response.choices[0].message.parsed
+    group_list: _GroupList | None = response.choices[0].message.parsed
+    if group_list is None:
+        return None
+    return group_list.groups
