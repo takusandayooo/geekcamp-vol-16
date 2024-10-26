@@ -30,14 +30,13 @@ def follow_up():
 
 @app.route("/table", methods=["GET", "POST"])
 def table():
-    if request.method == "POScT":
+    if request.method == "GET":
+        return render_template("table.html")
+    else:
         data = request.get_json()
         print(data)
         AI_follow_up_questions(data["result"])
         return jsonify({"status": "success", "result": data})
-
-    else:
-        return render_template("table.html")
 
 
 @app.route("/group_split", methods=["GET", "POST"])
