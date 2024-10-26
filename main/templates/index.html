@@ -1,187 +1,182 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>選択画面</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sriracha&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Sriracha&display=swap');
+        body {
+            margin: 0;
+            box-sizing: border-box;
+        }
 
-body {
-  margin: 0;
-  box-sizing: border-box;
-}
-/* CSS サービスへようこその部分 */
+        /* CSS サービスへようこその部分 */
 
-.nav-items {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: #f5f5f5;
-  margin-right: 20px;
-}
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #f5f5f5;
+            margin-right: 20px;
+        }
 
-.nav-items a {
-  text-decoration: none;
-  color: #000;
-  padding: 35px 20px;
-}
-/* CSS for main section */
-.intro {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 520px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%), url("{{url_for('static',filename='S__83132422.jpg')}}");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+        .nav-items a {
+            text-decoration: none;
+            color: #000;
+            padding: 35px 20px;
+        }
 
-.intro h1 {
-  font-family: sans-serif;
-  font-size: 60px;
-  color: #fff;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin: 0;
-}
+        /* CSS for main section */
+        .intro {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 520px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%),
+            url("{{url_for('static',filename='S__83132422.jpg')}}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
-.intro p {
-  font-size: 20px;
-  color: #d1d1d1;
-  text-transform: uppercase;
-  margin: 20px 0;
-}
+        .intro h1 {
+            font-family: sans-serif;
+            font-size: 60px;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0;
+        }
 
-.intro button {
-  background-color: #5edaf0;
-  color: #000;
-  padding: 10px 25px;
-  border: none;
-  border-radius: 5px;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.4)
-}
+        .intro p {
+            font-size: 20px;
+            color: #d1d1d1;
+            text-transform: uppercase;
+            margin: 20px 0;
+        }
 
-.achievements {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 40px 80px;
-}
+        .intro button {
+            background-color: #5edaf0;
+            color: #000;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.4)
+        }
 
-.achievements .whywebuildit {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0 40px;
-}
+        .achievements {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 40px 80px;
+        }
 
-
-
-.achievements .whywebuildit .whywebuildit-heading {
-  font-size: 20px;
-  color: #333333;
-  text-transform: uppercase;
-  margin: 10;
-}
-
-.about-me {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 80px;
-  border-top: 2px solid #eeeeee;
-}
-
-.about-me img {
-  width: 1000px;
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-}
-
-.about-me-text h2 {
-  font-size: 30px;
-  color: #333333;
-  text-transform: uppercase;
-  margin: 0;
-}
-
-.about-me-text p {
-  font-size: 15px;
-  color: #585858;
-  margin: 10px 0;
-}
-/*ボタンの設定*/
-
-a.btn--orange {
-  color: #faf5f5;
-  background-color: #eb6100;
-  Text-decoration: none
-  
-}
-
-a.btn--orange:hover {
-  color: #fff;
-  background: #f56500;
-  
-}
-
-a.btn--shadow {
-  -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 3px 5px rgba(177, 21, 21, 0.3);
-}
-
-a.btn--circle {
-  
-  
-  border-radius: 50%;
-  line-height: 130px;
-  font-size:  20px; 
-  width: 150px;
-  height: 150px;
-  padding: 0;
-  
-}
+        .achievements .whywebuildit {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 40px;
+        }
 
 
 
+        .achievements .whywebuildit .whywebuildit-heading {
+            font-size: 20px;
+            color: #333333;
+            text-transform: uppercase;
+            margin: 10;
+        }
+
+        .about-me {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 80px;
+            border-top: 2px solid #eeeeee;
+        }
+
+        .about-me img {
+            width: 1000px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .about-me-text h2 {
+            font-size: 30px;
+            color: #333333;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .about-me-text p {
+            font-size: 15px;
+            color: #585858;
+            margin: 10px 0;
+        }
+
+        /*ボタンの設定*/
+
+        a.btn--orange {
+            color: #faf5f5;
+            background-color: #eb6100;
+            Text-decoration: none
+        }
+
+        a.btn--orange:hover {
+            color: #fff;
+            background: #f56500;
+
+        }
+
+        a.btn--shadow {
+            -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 5px rgba(177, 21, 21, 0.3);
+        }
+
+        a.btn--circle {
 
 
+            border-radius: 50%;
+            line-height: 130px;
+            font-size: 20px;
+            width: 150px;
+            height: 150px;
+            padding: 0;
 
-
-
-
+        }
     </style>
-  <main>
-    <div class="intro">
-      <h1>サービス名（仮）へようこそ</h1>
-      <p>このウェブサイトではあなたの飲み会をより楽しいものにします</p>
-      <a href="/follow_up" class="btn btn--orange btn--circle btn--circle-a btn--shadow">自己紹介をする</a>
-    </div>
-    <div class="achievements">
-      <div class="whywebuildit">
-        <i class="fas fa-atom"></i>
-        <p class="whywebuildit-heading">Projects</p>
-        <p class="whywebuildit-text">【10月_Vol.16】ハッカソン技育CAMP2024で行われた、即席チームでアプリを開発しました。自己紹介の情報をもとにグループ分けを行い、会話内容に沿った話題を提供をします。</p>
-      </div>
-      
-      </div>
-    </div>
-    <div class="about-me">
-      <div class="about-me-text">
-        <h2>About US</h2>
-        <p>私たちは第16回ハッカソンに出場した、計5人で構成される「聞き上手」です。</p>
-      </div>
-      <img src="{{url_for('static',filename='77B39ED1-B839-4048-94ED-02E452E2DABE.jpg')}}" alt="me">
-    </div>
-  </main>
+    <main>
+        <div class="intro">
+            <h1>サービス名（仮）へようこそ</h1>
+            <p>このウェブサイトではあなたの飲み会をより楽しいものにします</p>
+            <a href="/follow_up" class="btn btn--orange btn--circle btn--circle-a btn--shadow">自己紹介をする</a>
+        </div>
+        <div class="achievements">
+            <div class="whywebuildit">
+                <i class="fas fa-atom"></i>
+                <p class="whywebuildit-heading">Projects</p>
+                <p class="whywebuildit-text">
+                    【10月_Vol.16】ハッカソン技育CAMP2024で行われた、即席チームでアプリを開発しました。自己紹介の情報をもとにグループ分けを行い、会話内容に沿った話題を提供をします。</p>
+            </div>
+
+        </div>
+        </div>
+        <div class="about-me">
+            <div class="about-me-text">
+                <h2>About US</h2>
+                <p>私たちは第16回ハッカソンに出場した、計5人で構成される「聞き上手」です。</p>
+            </div>
+            <img src="{{url_for('static',filename='77B39ED1-B839-4048-94ED-02E452E2DABE.jpg')}}" alt="me">
+        </div>
+    </main>
 
 
 

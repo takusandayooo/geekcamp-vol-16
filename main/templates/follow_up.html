@@ -1,42 +1,49 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>音声認識</title>
     <style>
-      /* CSSスタイルの定義 */
-      h1 {
-        color: green;
-        padding-left: 10px;
-        border-left: 10px solid #3cb371;
-        border-bottom: 1px dashed #3cb371;
-      }
-      .btn,
-      a.btn,
-      button.btn {
-        font-size: 1.6rem;
-        font-weight: 700;
-        display: inline-block;
-        padding: 1rem 4rem;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 0.5rem;
-      }
-      a.btn--yellow {
-        color: #000;
-        background-color: #fff100;
-        border-bottom: 5px solid #ccc100;
-      }
-      a.btn--yellow:hover {
-        margin-top: 3px;
-        background: #fff20a;
-        border-bottom: 2px solid #ccc100;
-      }
+        /* CSSスタイルの定義 */
+        h1 {
+            color: green;
+            padding-left: 10px;
+            border-left: 10px solid #3cb371;
+            border-bottom: 1px dashed #3cb371;
+        }
+
+        .btn,
+        a.btn,
+        button.btn {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: inline-block;
+            padding: 1rem 4rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 0.5rem;
+        }
+
+        a.btn--yellow {
+            color: #000;
+            background-color: #fff100;
+            border-bottom: 5px solid #ccc100;
+        }
+
+        a.btn--yellow:hover {
+            margin-top: 3px;
+            background: #fff20a;
+            border-bottom: 2px solid #ccc100;
+        }
     </style>
-  </head>
-  <body>
-    <center><h1>自己紹介認識</h1></center>
+</head>
+
+<body>
+    <center>
+        <h1>自己紹介認識</h1>
+    </center>
     <button id="startbtn">録音開始</button>
     <button id="stopbtn">録音停止</button>
     <button id="aibtn">AIの追加質問</button>
@@ -48,102 +55,103 @@
     <h3>AIの追加質問</h3>
     <div id="follow_up_content"></div>
     <script>
-      // 音声認識の準備
-      const speech = new webkitSpeechRecognition();
-      speech.lang = "ja-JP";
-      speech.interimResults = false;
+        // 音声認識の準備
+        const speech = new webkitSpeechRecognition();
+        speech.lang = "ja-JP";
+        speech.interimResults = false;
 
-      // 録音を続けるためのフラグ
-      let isRecording = false;
+        // 録音を続けるためのフラグ
+        let isRecording = false;
 
-      // 変数の初期化
-      const startbtn = document.getElementById("startbtn");
-      const stopbtn = document.getElementById("stopbtn");
-      const aibtn = document.getElementById("aibtn");
-      const nextbtn = document.getElementById("next");
-      const sendbtn = document.getElementById("send");
-      const content = document.getElementById("content");
-      const follow_up = document.getElementById("follow_up");
-      const follow_up_content = document.getElementById("follow_up_content");
+        // 変数の初期化
+        const startbtn = document.getElementById("startbtn");
+        const stopbtn = document.getElementById("stopbtn");
+        const aibtn = document.getElementById("aibtn");
+        const nextbtn = document.getElementById("next");
+        const sendbtn = document.getElementById("send");
+        const content = document.getElementById("content");
+        const follow_up = document.getElementById("follow_up");
+        const follow_up_content = document.getElementById("follow_up_content");
 
-      let allResponses = []; // 全ユーザーの音声認識結果を保存する多次元配列
-      let currentUserIndex = 0; // 現在のユーザーのインデックス
+        let allResponses = []; // 全ユーザーの音声認識結果を保存する多次元配列
+        let currentUserIndex = 0; // 現在のユーザーのインデックス
 
-      // 回答リストを初期化
-      allResponses[currentUserIndex] = [];
+        // 回答リストを初期化
+        allResponses[currentUserIndex] = [];
 
-      // 録音開始ボタンを押した際の音声認識開始
-      startbtn.addEventListener("click", function () {
-        isRecording = true;
-        speech.start();
-      });
-
-      // 録音停止ボタンを押した際の音声認識停止
-      stopbtn.addEventListener("click", function () {
-        isRecording = false;
-        speech.stop();
-      });
-
-      // AIの追加質問ボタンを押した際の音声認識再スタート
-      aibtn.addEventListener("click", function () {
-        speech.start();
-      });
-
-      // 音声認識結果を取得した際の処理
-      speech.addEventListener("result", function (e) {
-        const text = e.results[0][0].transcript;
-        allResponses[currentUserIndex].push(text); // 配列に結果を追加
-        displayResponses();
-      });
-
-      // 音声認識が停止されたときの処理
-      speech.addEventListener("end", function () {
-        if (isRecording) {
-          speech.start(); // 停止ボタンが押されるまで再開する
-        }
-      });
-
-      // 「次の人」ボタンを押した際の処理
-      nextbtn.addEventListener("click", function () {
-        currentUserIndex++; // 次のユーザーに移動
-        allResponses[currentUserIndex] = []; // 配列を追加
-        displayResponses();
-        follow_up_content.innerText="";
-      });
-
-      // 現在のすべての応答を表示する関数
-      function displayResponses() {
-        content.innerText =
-          "現在の応答（ユーザー" +
-          (currentUserIndex + 1) +
-          "）: " +
-          allResponses[currentUserIndex].join(", ");
-      }
-
-      // 「送信!」ボタンを押した際の処理
-      sendbtn.addEventListener("click", function () {
-        // `allResponses` を JSON 文字列として `localStorage` に保存
-        localStorage.setItem("allResponses", JSON.stringify(allResponses));
-        // `table.html` にリダイレクト
-        window.location.href = "/table";
-      });
-
-      follow_up.addEventListener("click", async function () {
-        let result = await fetch("/follow_up", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            result: allResponses,
-          }),
+        // 録音開始ボタンを押した際の音声認識開始
+        startbtn.addEventListener("click", function () {
+            isRecording = true;
+            speech.start();
         });
-        let data = await result.json();
-        // 改行を追加した文字列を作成
-        let follow_up_text = data.result.join("\n");
-        follow_up_content.innerText = follow_up_text;
-      });
+
+        // 録音停止ボタンを押した際の音声認識停止
+        stopbtn.addEventListener("click", function () {
+            isRecording = false;
+            speech.stop();
+        });
+
+        // AIの追加質問ボタンを押した際の音声認識再スタート
+        aibtn.addEventListener("click", function () {
+            speech.start();
+        });
+
+        // 音声認識結果を取得した際の処理
+        speech.addEventListener("result", function (e) {
+            const text = e.results[0][0].transcript;
+            allResponses[currentUserIndex].push(text); // 配列に結果を追加
+            displayResponses();
+        });
+
+        // 音声認識が停止されたときの処理
+        speech.addEventListener("end", function () {
+            if (isRecording) {
+                speech.start(); // 停止ボタンが押されるまで再開する
+            }
+        });
+
+        // 「次の人」ボタンを押した際の処理
+        nextbtn.addEventListener("click", function () {
+            currentUserIndex++; // 次のユーザーに移動
+            allResponses[currentUserIndex] = []; // 配列を追加
+            displayResponses();
+            follow_up_content.innerText = "";
+        });
+
+        // 現在のすべての応答を表示する関数
+        function displayResponses() {
+            content.innerText =
+                "現在の応答（ユーザー" +
+                (currentUserIndex + 1) +
+                "）: " +
+                allResponses[currentUserIndex].join(", ");
+        }
+
+        // 「送信!」ボタンを押した際の処理
+        sendbtn.addEventListener("click", function () {
+            // `allResponses` を JSON 文字列として `localStorage` に保存
+            localStorage.setItem("allResponses", JSON.stringify(allResponses));
+            // `table.html` にリダイレクト
+            window.location.href = "/table";
+        });
+
+        follow_up.addEventListener("click", async function () {
+            let result = await fetch("/follow_up", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    result: allResponses,
+                }),
+            });
+            let data = await result.json();
+            // 改行を追加した文字列を作成
+            let follow_up_text = data.result.join("\n");
+            follow_up_content.innerText = follow_up_text;
+        });
 
     </script>
-  </body>
+</body>
+
 </html>
