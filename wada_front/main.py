@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import json
 
 
-class CalendarEvent(BaseModel):
+class FollowUpQuestions(BaseModel):
     questions: list[str]
 
 
@@ -29,7 +29,7 @@ def AI_follow_up_questions(chat):
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
         ],
-        response_format=CalendarEvent,
+        response_format=FollowUpQuestions,
     )
     response_content = completion.choices[0].message.content
     json_data = json.loads(response_content).get("questions")
