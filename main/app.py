@@ -4,6 +4,7 @@ from pydantic import ValidationError
 
 from module.group_split import Groups, Introductions, split_groups
 from module.follow_up import AI_follow_up_questions
+from module.recognition_main import voice_recognition_func
 
 
 load_dotenv()
@@ -33,17 +34,6 @@ def table():
     if request.method == "GET":
         return render_template("table.html")
     else:
-        data = request.get_json()
-        print(data)
-        AI_follow_up_questions(data["result"])
-        return jsonify({"status": "success", "result": data})
-
-
-@app.route("/group_split", methods=["GET", "POST"])
-def group_split():
-    if request.method == "GET":
-        return render_template("group_split.html")
-    else:
         try:
             data = request.get_json()
             intros = Introductions(**data["intros"])
@@ -61,6 +51,15 @@ def group_split():
             )
         return jsonify(groups.model_dump())
 
+@app.route("/voice_recognition", methods=["POST", "GET"])
+def voice_recognition():
+    if request.method == "GET":
+        return render_template("voice_recognition.html")
+    else:
+        data = request.get_json()
+        print(data['result'])
+        result=voice_recognition_func(data['result'])
+        return jsonify({"status": "success", "result": result})
 
 if __name__ == "__main__":
     app.run(debug=True)
