@@ -14,10 +14,27 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route("/follow_up", methods=["GET"])
+@app.route("/follow_up", methods=["GET", "POST"])
 def follow_up():
+    if request.method == "POST":
+        data = request.get_json()
+        print(data)
+        result=AI_follow_up_questions(data['result'])
+        print(result)
+        return jsonify({"status": "success", "result": result})
+    else:
+        return render_template("follow_up.html")
 
-    return render_template("follow_up.html")
+@app.route('/table', methods=['GET', 'POST'])
+def table():
+    if request.method == 'POScT':
+        data = request.get_json()
+        print(data)
+        AI_follow_up_questions(data['result'])
+        return jsonify({"status": "success", "result": data})
+
+    else:
+        return render_template('table.html')
 
 @app.route('/group_split', methods=['GET', 'POST'])
 def group_split():
