@@ -35,100 +35,108 @@
     <div id="container"></div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", async function (event) {
-            const createGroupSection = function (group, allIntroductions) {
-                h2 = document.createElement('h2')
-                h2.innerText = group['group_name']
-                p = document.createElement('p')
-                p.innerText = group['feature']
+        document.addEventListener("DOMContentLoaded", async (event) => {
+            const createGroupSection = (group, allIntroductions) => {
+                h2 = document.createElement("h2");
+                h2.innerText = group.group_name;
+                p = document.createElement("p");
+                p.innerText = group.feature;
 
                 // username, 自己紹介文
-                tbl = document.createElement('table')
+                tbl = document.createElement("table");
 
-                tblHead = document.createElement('thead')
-                usernameTh = document.createElement('th')
-                usernameTh.appendChild(document.createTextNode('ユーザー名'))
-                introTh = document.createElement('th')
-                introTh.appendChild(document.createTextNode('自己紹介文'))
-                headTr = document.createElement('tr')
-                headTr.appendChild(usernameTh)
-                headTr.appendChild(introTh)
-                tblHead.appendChild(headTr)
+                tblHead = document.createElement("thead");
+                usernameTh = document.createElement("th");
+                usernameTh.appendChild(document.createTextNode("ユーザー名"));
+                introTh = document.createElement("th");
+                introTh.appendChild(document.createTextNode("自己紹介文"));
+                headTr = document.createElement("tr");
+                headTr.appendChild(usernameTh);
+                headTr.appendChild(introTh);
+                tblHead.appendChild(headTr);
 
-                rows = group['name'].map((username) => {
-                    intro = allIntroductions['self_introductions'].filter((intro) => intro['name'] == username)[0]
-                    intro_text = intro['self_introduction']
+                rows = group.name.map((username) => {
+                    intro = allIntroductions.self_introductions.filter(
+                        (intro) => intro.name === username,
+                    )[0];
+                    intro_text = intro.self_introduction;
 
-                    usernameTh = document.createElement('th')
-                    usernameTh.appendChild(document.createTextNode(username))
-                    introTd = document.createElement('td')
-                    introTd.appendChild(document.createTextNode(intro_text))
-                    row = document.createElement('tr')
-                    row.appendChild(usernameTh)
-                    row.appendChild(introTd)
-                    return row
-                })
-                tblBody = document.createElement('tbody')
-                rows.forEach((row) => {
-                    tblBody.appendChild(row)
-                })
+                    usernameTh = document.createElement("th");
+                    usernameTh.appendChild(document.createTextNode(username));
+                    introTd = document.createElement("td");
+                    introTd.appendChild(document.createTextNode(intro_text));
+                    row = document.createElement("tr");
+                    row.appendChild(usernameTh);
+                    row.appendChild(introTd);
+                    return row;
+                });
+                tblBody = document.createElement("tbody");
+                for (const row of rows) {
+                    tblBody.appendChild(row);
+                }
 
-                tbl.appendChild(tblHead)
-                tbl.appendChild(tblBody)
+                tbl.appendChild(tblHead);
+                tbl.appendChild(tblBody);
 
-                div = document.createElement('div')
+                div = document.createElement("div");
                 // [h2, p, tbl].forEach((elm) => div.appendChild(elm))
-                div.appendChild(h2)
-                div.appendChild(p)
-                div.appendChild(tbl)
+                div.appendChild(h2);
+                div.appendChild(p);
+                div.appendChild(tbl);
 
-                return div
-            }
+                return div;
+            };
 
-            const createAllIntroductions = function (allResponses) {
-                let all_introductions = {'self_introductions': []}
+            const createAllIntroductions = (allResponses) => {
+                const all_introductions = {self_introductions: []};
                 allResponses.forEach((intro_texts, index) => {
-                    username = `ユーザー${index + 1}`
-                    intro_text = intro_texts.join('。')
-                    all_introductions['self_introductions'].push({'name': username, 'self_introduction': intro_text})
-                })
-                return all_introductions
-            }
+                    username = `ユーザー${index + 1}`;
+                    intro_text = intro_texts.join("。");
+                    all_introductions.self_introductions.push({
+                        name: username,
+                        self_introduction: intro_text,
+                    });
+                });
+                return all_introductions;
+            };
 
-            const split_groups = async function (allIntroductions) {
+            const split_groups = async (allIntroductions) => {
                 const response = await fetch("/table", {
-                    method: 'POST',
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(allIntroductions),
-                })
-                groups = await response.json()
-                return groups['groups']
-            }
+                });
+                groups = await response.json();
+                return groups.groups;
+            };
             // `localStorage` から音声認識データを取得
             // allResponsesは配列
             //   index: ユーザーインデックス
             //   value: 発言内容のテキストの配列
             //          ["内容１", "内容２"]
-            const allResponses = JSON.parse(localStorage.getItem('allResponses')) || [];
-            const allIntroductions = createAllIntroductions(allResponses)
+            const allResponses = JSON.parse(localStorage.getItem("allResponses")) || [];
+            const allIntroductions = createAllIntroductions(allResponses);
             // groupsは以下を要素としてもつリスト
             // {
             //   "group_name": "グループ名",
             //   "feature": "特徴",
             //   "name": ["ユーザー１", "ユーザー２"]
             // }
-            let groups = []
-            if (allIntroductions['self_introductions'].length != 0) {
-                groups = await split_groups(allIntroductions)
+            let groups = [];
+            if (allIntroductions.self_introductions.length !== 0) {
+                groups = await split_groups(allIntroductions);
             }
 
-            container = document.getElementById('container')
-            console.log(allIntroductions)
-            groupSections = groups.map((group) => createGroupSection(group, allIntroductions))
-            groupSections.forEach((groupSection) => container.appendChild(groupSection))
-        })
+            container = document.getElementById("container");
+            groupSections = groups.map((group) =>
+                createGroupSection(group, allIntroductions),
+            );
+            for (const groupSection of groupSections) {
+                container.appendChild(groupSection);
+            }
+        });
     </script>
 
 </body>
