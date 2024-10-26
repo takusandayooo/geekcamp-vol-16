@@ -36,7 +36,7 @@ def table():
     else:
         try:
             data = request.get_json()
-            intros = Introductions(**data["intros"])
+            intros = Introductions(**data)
         except ValidationError:
             abort(
                 500,
@@ -51,15 +51,17 @@ def table():
             )
         return jsonify(groups.model_dump())
 
+
 @app.route("/voice_recognition", methods=["POST", "GET"])
 def voice_recognition():
     if request.method == "GET":
         return render_template("voice_recognition.html")
     else:
         data = request.get_json()
-        print(data['result'])
-        result=voice_recognition_func(data['result'])
+        print(data["result"])
+        result = voice_recognition_func(data["result"])
         return jsonify({"status": "success", "result": result})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

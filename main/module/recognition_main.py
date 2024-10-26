@@ -1,4 +1,4 @@
-﻿import os
+import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
@@ -8,47 +8,43 @@ import pandas as pd
 
 load_dotenv()
 
-def news_sum(kensaku=''):
 
+def news_sum(kensaku=""):
     # print('news')
-    newsAI_key = os.getenv('SEARCH_API_KEY')
+    newsAI_key = os.getenv("SEARCH_API_KEY")
     # NewsAIのキーを代入
 
-    headers = {'X-Api-Key': newsAI_key}
-    url = 'https://newsapi.org/v2/everything'
-    params = {
-        'q': kensaku,
-        'sortBy': 'popularity',
-        'pageSize': 20
-    }
+    headers = {"X-Api-Key": newsAI_key}
+    url = "https://newsapi.org/v2/everything"
+    params = {"q": kensaku, "sortBy": "popularity", "pageSize": 20}
     response = requests.get(url, headers=headers, params=params)
 
     if response.ok:
         data = response.json()
         # print(data)
-        df = pd.DataFrame(data['articles'])
+        df = pd.DataFrame(data["articles"])
         # print('totalResults:', data['totalResults'])
-        if data['totalResults'] == 0:
-            print('該当する記事がありません')
+        if data["totalResults"] == 0:
+            print("該当する記事がありません")
             return ""
     else:
         return ""
-    news_sum_description = df[['description']]
-    news_sumlist = news_sum_description['description'].tolist()
+    news_sum_description = df[["description"]]
+    news_sumlist = news_sum_description["description"].tolist()
 
-    recent_news = '最新のニュース記事10個:'
+    recent_news = "最新のニュース記事10個:"
     for i in range(len(news_sumlist)):
         # print(i)
-        recent_news = recent_news+str(i+1)+'個めのニュース/n'+str(news_sumlist[i])
-    print('最新のニュース；'+recent_news)
+        recent_news = (
+            recent_news + str(i + 1) + "個めのニュース/n" + str(news_sumlist[i])
+        )
+    print("最新のニュース；" + recent_news)
     return recent_news
-
-
-
 
 
 class SubjectProvider(BaseModel):
     subject: list[str]
+
 
 def subject_provider(kaiwa, news=""):
     data = kaiwa + "," + news
@@ -68,8 +64,9 @@ def subject_provider(kaiwa, news=""):
     )
 
     respond = completion.choices[0].message.content
-    json_data=json.loads(respond).get("subject")
+    json_data = json.loads(respond).get("subject")
     return json_data
+
 
 def subject_sum(data):
     # print('話題関数はじめ')
@@ -80,19 +77,19 @@ def subject_sum(data):
     completion = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
         messages=[
-            {"role": "system", "content": "あなたは大学生で、飲み会に参加しています。会話内容を要約して、関係ありそうなニュースを検索するためのプロンプトを表示してください。検索するための空白は,ANDと入力して下さい。例;入力例;おなかすいたね;出力例;食べ物AND話題"},
-            {"role": "user", "content": data}
-        ]
+            {
+                "role": "system",
+                "content": "あなたは大学生で、飲み会に参加しています。会話内容を要約して、関係ありそうなニュースを検索するためのプロンプトを表示してください。検索するための空白は,ANDと入力して下さい。例;入力例;おなかすいたね;出力例;食べ物AND話題",
+            },
+            {"role": "user", "content": data},
+        ],
     )
 
     # print('話題の検索プロンプト'+completion.choices[0].message.content)
     return completion.choices[0].message.content
 
 
-
-
 def voice_recognition_func(talk_data):
-
     # 会話データを入力
     pro = subject_sum(talk_data)
     # 会話の内容を検索プロンプトに変更
@@ -106,5 +103,7 @@ def voice_recognition_func(talk_data):
 
 
 if __name__ == "__main__":
-    talk_data = "私は、東京都在住の大学生です。趣味は読書で、最近は小説をよく読んでいます。"
+    talk_data = (
+        "私は、東京都在住の大学生です。趣味は読書で、最近は小説をよく読んでいます。"
+    )
     voice_recognition_func(talk_data)

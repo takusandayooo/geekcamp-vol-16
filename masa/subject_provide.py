@@ -1,18 +1,18 @@
-﻿from dotenv import load_dotenv
+from dotenv import load_dotenv
 from openai import OpenAI
 
 load_dotenv()
 
 import os
 
-#CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+# CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
 
 def subject_provider(kaiwa, news=""):
     data = kaiwa + "," + news
     # dataが会話内容、subjectが話題の配列です。5つの話題を提供します。
     client = OpenAI()
-    #apikeyを入力
+    # apikeyを入力
     completion = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
         messages=[
@@ -24,9 +24,8 @@ def subject_provider(kaiwa, news=""):
         ],
     )
 
-   
-    respond =completion.choices[0].message.content
-    #出力された内容をrespondに代入
+    respond = completion.choices[0].message.content
+    # 出力された内容をrespondに代入
 
     subject = respond.split(":")
     subject.remove("")

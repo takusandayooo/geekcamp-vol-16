@@ -1,16 +1,22 @@
+from dotenv import load_dotenv
 from flask import Flask, render_template, request
 
 
+load_dotenv()
+
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return render_template('index.html')
 
-@app.route('/voice_recognition', methods=['POST'])
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+
+@app.route("/voice_recognition", methods=["POST"])
 def voice_recognition():
     data = request.get_json()
-    print(data['result'])
+    print(data["result"])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)
