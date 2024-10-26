@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>結果一覧</title>
+    <style>
+        h1 {
+            color: green;
+            padding-left: 10px;
+            border-left: 10px solid #3cb371;
+            border-bottom: 1px dashed #3cb371;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #3cb371;
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <center><h1>自己紹介まとめ</h1></center>
+    <table>
+
+        <thead>
+            <tr>
+                <th>ユーザ</th>
+                <th>内容</th>
+            </tr>
+        </thead>
+
+        <tbody id="responseTable"></tbody>
+    </table>
+
+    <script>
+        // `localStorage` から音声認識データを取得
+        const allResponses = JSON.parse(localStorage.getItem('allResponses')) || [];
+
+        // `responseTable` にデータを追加する
+        const responseTable = document.getElementById('responseTable');
+        allResponses.forEach((responses, index) => {
+            const row = document.createElement('tr');
+            const userCell = document.createElement('td');
+            const responseCell = document.createElement('td');
+
+            userCell.textContent = `${index + 1}人目`;
+            responseCell.textContent = responses.join(', ');
+
+            row.appendChild(userCell);
+            row.appendChild(responseCell);
+            responseTable.appendChild(row);
+        });
+    </script>
+
+</body>
+</html>

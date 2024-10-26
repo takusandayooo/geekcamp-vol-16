@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>音声認識</title>
+    <style>
+      /* CSSスタイルの定義 */
+      h1 {
+        color: green;
+        padding-left: 10px;
+        border-left: 10px solid #3cb371;
+        border-bottom: 1px dashed #3cb371;
+      }
+      .btn,
+      a.btn,
+      button.btn {
+        font-size: 1.6rem;
+        font-weight: 700;
+        display: inline-block;
+        padding: 1rem 4rem;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 0.5rem;
+      }
+      a.btn--yellow {
+        color: #000;
+        background-color: #fff100;
+        border-bottom: 5px solid #ccc100;
+      }
+      a.btn--yellow:hover {
+        margin-top: 3px;
+        background: #fff20a;
+        border-bottom: 2px solid #ccc100;
+      }
+    </style>
+  </head>
+  <body>
+    <center><h1>自己紹介認識</h1></center>
+    <button id="btn">録音ボタン</button>
+    <button id="follow_up">AIの追加質問を表示</button>
+
+    <button id="aibtn">AIの追加質問</button>
+    <button id="next">次の人</button>
+    <button id="send" class="btn btn--yellow btn--cubic">送信!</button>
+    <div id="content"></div>
+    <h3> AIの追加質問</h3>
+    <div id="follow_up_content"></div>
+    <script>
+      // 音声認識の準備
+      const speech = new webkitSpeechRecognition();
+      speech.lang = "ja-JP";
+
+      // 変数の初期化
+      const btn = document.getElementById("btn");
+      const aibtn = document.getElementById("aibtn");
+      const nextBtn = document.getElementById("next");
+      const sendBtn = document.getElementById("send");
+      const content = document.getElementById("content");
+      const follow_up = document.getElementById("follow_up");
+      const follow_up_content = document.getElementById("follow_up_content");
+
+      let allResponses = []; // 全ユーザーの音声認識結果を保存する多次元配列
+      let currentUserIndex = 0; // 現在のユーザーのインデックス
+
+      // 新しいユーザーの回答リストを初期化
+      allResponses[currentUserIndex] = [];
+
+      // 録音ボタンを押した際の音声認識開始
+      btn.addEventListener("click", function () {
+        speech.start();
+      });
+
+      // AIの追加質問ボタンを押した際の音声認識再スタート
+      aibtn.addEventListener("click", function () {
+        speech.start();
+      });
+
+      // 音声認識結果を取得した際の処理
+      speech.addEventListener("result", function (e) {
+        const text = e.results[0][0].transcript;
+        allResponses[currentUserIndex].push(text); // 現在のユーザーの配列に結果を追加
+        displayResponses();
+      });
+
+      // 「次の人」ボタンを押した際の処理
+      nextBtn.addEventListener("click", function () {
+
+        currentUserIndex++; // 次のユーザーに移動
+        allResponses[currentUserIndex] = []; // 新しいユーザーのための配列を追加
+        displayResponses();
+        follow_up_content.innerText = "";
+      });
+
+      // 現在のすべての応答を表示する関数
+      function displayResponses() {
+        content.innerText =
+          "現在の応答（ユーザー" +
+          (currentUserIndex + 1) +
+          "）: " +
+          allResponses[currentUserIndex].join(", ");
+      }
+      follow_up.addEventListener("click", async function () {
+        let result=await fetch("/follow_up", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            result: allResponses,
+          }),
+        });
+        let data=await result.json();
+        // 改行を追加した文字列を作成
+        let follow_up_text = data.result.join("\n");
+        follow_up_content.innerText = follow_up_text;
+      });
+
+      // 「送信!」ボタンを押した際の処理
+      sendBtn.addEventListener("click", function () {
+        // `allResponses` を JSON 文字列として `localStorage` に保存
+        localStorage.setItem("allResponses", JSON.stringify(allResponses));
+        // `table.html` にリダイレクト
+        window.location.href = "table";
+
+      });
+    </script>
+  </body>
+</html>
