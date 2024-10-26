@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>結果一覧</title>
@@ -10,12 +11,15 @@
             border-left: 10px solid #3cb371;
             border-bottom: 1px dashed #3cb371;
         }
+
         table {
             width: 80%;
             margin: 20px auto;
             border-collapse: collapse;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #3cb371;
             padding: 10px;
             text-align: left;
@@ -24,44 +28,109 @@
 </head>
 
 <body>
-    <center><h1>自己紹介まとめ</h1></center>
-    <table>
-
-        <thead>
-            <tr>
-                <th>ユーザ</th>
-                <th>内容</th>
-            </tr>
-        </thead>
-
-        <tbody id="responseTable"></tbody>
-    </table>
+    <center>
+        <h1>自己紹介まとめ</h1>
+    </center>
+        <a href="/voice_recognition">おすすめ機能</a>
+    <div id="container"></div>
 
     <script>
-        // `localStorage` から音声認識データを取得
-        const allResponses = JSON.parse(localStorage.getItem('allResponses')) || [];
-        // allResponsesは配列
-        //   index: ユーザーインデックス
-        //   value: 発言内容のテキストの配列
-        //          ["内容１", "内容２"]
-        print(localStorage.getItem['allResponses'])
+        document.addEventListener("DOMContentLoaded", async function (event) {
+            const createGroupSection = function (group, allIntroductions) {
+                h2 = document.createElement('h2')
+                h2.innerText = group['group_name']
+                p = document.createElement('p')
+                p.innerText = group['feature']
 
-        // `responseTable` にデータを追加する
-        const responseTable = document.getElementById('responseTable');
-        allResponses.forEach((response, index) => {
-            const row = document.createElement('tr');
-            row.setAttribute('scope', 'row')
-            const userCell = document.createElement('th');
-            const responseCell = document.createElement('td');
+                // username, 自己紹介文
+                tbl = document.createElement('table')
 
-            userCell.textContent = `${index + 1}人目`;
-            responseCell.textContent = response.join(', ');
+                tblHead = document.createElement('thead')
+                usernameTh = document.createElement('th')
+                usernameTh.appendChild(document.createTextNode('ユーザー名'))
+                introTh = document.createElement('th')
+                introTh.appendChild(document.createTextNode('自己紹介文'))
+                headTr = document.createElement('tr')
+                headTr.appendChild(usernameTh)
+                headTr.appendChild(introTh)
+                tblHead.appendChild(headTr)
 
-            row.appendChild(userCell);
-            row.appendChild(responseCell);
-            responseTable.appendChild(row);
-        });
+                rows = group['name'].map((username) => {
+                    intro = allIntroductions['self_introductions'].filter((intro) => intro['name'] == username)[0]
+                    intro_text = intro['self_introduction']
+
+                    usernameTh = document.createElement('th')
+                    usernameTh.appendChild(document.createTextNode(username))
+                    introTd = document.createElement('td')
+                    introTd.appendChild(document.createTextNode(intro_text))
+                    row = document.createElement('tr')
+                    row.appendChild(usernameTh)
+                    row.appendChild(introTd)
+                    return row
+                })
+                tblBody = document.createElement('tbody')
+                rows.forEach((row) => {
+                    tblBody.appendChild(row)
+                })
+
+                tbl.appendChild(tblHead)
+                tbl.appendChild(tblBody)
+
+                div = document.createElement('div')
+                // [h2, p, tbl].forEach((elm) => div.appendChild(elm))
+                div.appendChild(h2)
+                div.appendChild(p)
+                div.appendChild(tbl)
+
+                return div
+            }
+
+            const createAllIntroductions = function (allResponses) {
+                let all_introductions = {'self_introductions': []}
+                allResponses.forEach((intro_texts, index) => {
+                    username = `ユーザー${index + 1}`
+                    intro_text = intro_texts.join('。')
+                    all_introductions['self_introductions'].push({'name': username, 'self_introduction': intro_text})
+                })
+                return all_introductions
+            }
+
+            const split_groups = async function (allIntroductions) {
+                const response = await fetch("/table", {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(allIntroductions),
+                })
+                groups = await response.json()
+                return groups['groups']
+            }
+            // `localStorage` から音声認識データを取得
+            // allResponsesは配列
+            //   index: ユーザーインデックス
+            //   value: 発言内容のテキストの配列
+            //          ["内容１", "内容２"]
+            const allResponses = JSON.parse(localStorage.getItem('allResponses')) || [];
+            const allIntroductions = createAllIntroductions(allResponses)
+            // groupsは以下を要素としてもつリスト
+            // {
+            //   "group_name": "グループ名",
+            //   "feature": "特徴",
+            //   "name": ["ユーザー１", "ユーザー２"]
+            // }
+            let groups = []
+            if (allIntroductions['self_introductions'].length != 0) {
+                groups = await split_groups(allIntroductions)
+            }
+
+            container = document.getElementById('container')
+            console.log(allIntroductions)
+            groupSections = groups.map((group) => createGroupSection(group, allIntroductions))
+            groupSections.forEach((groupSection) => container.appendChild(groupSection))
+        })
     </script>
 
 </body>
+
 </html>
