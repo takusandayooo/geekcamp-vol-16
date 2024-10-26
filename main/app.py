@@ -1,11 +1,13 @@
 from dotenv import load_dotenv
 from flask import Flask, abort, jsonify, render_template, request
-from pydantic import ValidationError
-
-from module.group_split import Groups, Introductions, split_groups
 from module.follow_up import AI_follow_up_questions
+from module.group_split import (
+    Group,
+    Introduction,
+    split_groups_by,
+)
 from module.recognition_main import voice_recognition_func
-
+from pydantic import ValidationError
 
 load_dotenv()
 
@@ -34,22 +36,20 @@ def table():
     if request.method == "GET":
         return render_template("table.html")
     else:
+        body = request.get_json()
         try:
-            data = request.get_json()
-            intros = Introductions(**data)
+            intros = [Introduction(**intro) for intro in body["data"]]
         except ValidationError:
             abort(
-                500,
-                description="原因不明のエラーが発生しました。時間を空けて実行して下さい。",
+                500, "サーバー内で問題が生じました。時間を空けてから実行してください。"
             )
 
-        groups: Groups | None = split_groups(intros)
+        groups: list[Group] | None = split_groups_by(intros)
         if groups is None:
-            abort(
-                500,
-                description="原因不明のエラーが発生しました。時間を空けて実行して下さい。",
-            )
-        return jsonify(groups.model_dump())
+            return jsonify({"result": []})
+
+        result = [group.model_dump() for group in groups]
+        return jsonify({"result": result})
 
 
 @app.route("/voice_recognition", methods=["POST", "GET"])

@@ -21,7 +21,7 @@ class _IntroductionList(BaseModel):
     introductions: list[Introduction]
 
 
-def split_groups(intros: list[Introduction]) -> list[Group] | None:
+def split_groups_by(intros: list[Introduction]) -> list[Group] | None:
     if len(intros) == 0:
         return None
 
