@@ -28,10 +28,8 @@ class Introductions(BaseModel):
         self.self_introductions.append(introduction)
 
 
-client = OpenAI()
-
-
 def split_groups(intros: Introductions) -> Groups | None:
+    client = OpenAI()
     intros_json = intros.model_dump_json()
     response = client.beta.chat.completions.parse(
         model="gpt-4o-mini-2024-07-18",
