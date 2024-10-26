@@ -1,8 +1,5 @@
-from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
-
-load_dotenv()
 
 
 class Group(BaseModel):
@@ -22,10 +19,6 @@ class Introduction(BaseModel):
 
 class Introductions(BaseModel):
     self_introductions: list[Introduction]
-
-    def add_introduction(self, name: str, intro: str):
-        introduction = Introduction(name=name, self_introduction=intro)
-        self.self_introductions.append(introduction)
 
 
 def split_groups(intros: Introductions) -> Groups | None:
