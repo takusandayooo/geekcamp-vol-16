@@ -33,17 +33,6 @@ def table():
     if request.method == "GET":
         return render_template("table.html")
     else:
-        data = request.get_json()
-        print(data)
-        AI_follow_up_questions(data["result"])
-        return jsonify({"status": "success", "result": data})
-
-
-@app.route("/group_split", methods=["GET", "POST"])
-def group_split():
-    if request.method == "GET":
-        return render_template("group_split.html")
-    else:
         try:
             data = request.get_json()
             intros = Introductions(**data["intros"])
