@@ -1,12 +1,6 @@
-import os
 from openai import OpenAI
-from dotenv import load_dotenv
 from pydantic import BaseModel
 import json
-
-load_dotenv()
-
-OPEN_AI_API_KEY = os.getenv('OPEN_AI_API_KEY')
 
 
 class CalendarEvent(BaseModel):
@@ -15,7 +9,7 @@ class CalendarEvent(BaseModel):
 
 # NOTE:自己紹介してもらった内容から、追加の質問があった場合に返答する関数
 def AI_follow_up_questions(chat):
-    client = OpenAI(api_key=OPEN_AI_API_KEY)
+    client = OpenAI()
     system_prompt = """
         あなたは、ユーザーの自己紹介をもとに追加質問を生成するアシスタントです。ユーザーの自己紹介が不十分な場合、関連する情報を補完するための一般的な質問を以下の形式で提示してください。質問が不要な場合は「false」を返してください。
 
