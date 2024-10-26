@@ -4,6 +4,7 @@ from pydantic import ValidationError
 
 from module.group_split import Groups, Introductions, split_groups
 from module.follow_up import AI_follow_up_questions
+from module.recognition_main import voice_recognition_func
 
 
 load_dotenv()
@@ -57,7 +58,8 @@ def voice_recognition():
     else:
         data = request.get_json()
         print(data['result'])
-        return jsonify({"status": "success", "result": data['result']})
+        result=voice_recognition_func(data['result'])
+        return jsonify({"status": "success", "result": result})
 
 if __name__ == "__main__":
     app.run(debug=True)

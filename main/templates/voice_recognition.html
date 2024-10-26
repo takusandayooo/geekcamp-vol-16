@@ -133,10 +133,8 @@
             result: allvoice_text,
           }),
         });
-        console.log(result);
-        let data = result.json();
-        const text = data.result;
-        console.log(text);
+        let data =await result.json();
+        const text = data.result.join("\n");
         document.getElementById("non-text-content").innerText = text;
       }
     </script>
