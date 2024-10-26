@@ -2,7 +2,8 @@ from dotenv import load_dotenv
 from flask import Flask, abort, jsonify, render_template, request
 from pydantic import ValidationError
 
-from group_split.prompt import Groups, Introductions, split_groups
+from main.module.group_split import Groups, Introductions, split_groups
+from module.follow_up import AI_follow_up_questions
 
 
 load_dotenv()
