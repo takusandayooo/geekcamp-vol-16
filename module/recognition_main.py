@@ -50,7 +50,7 @@ class SubjectProvider(BaseModel):
 def subject_provider(api_keys: ApiKeys, kaiwa, news=""):
     data = kaiwa + "," + news
     # dataが会話内容、subjectが話題の配列です。5つの話題を提供します。
-    client = OpenAI(api_key=api_keys.openapi_api_key)
+    client = OpenAI(api_key=api_keys.openai_api_key)
     # apikeyを入力
     completion = client.beta.chat.completions.parse(
         model="gpt-4o-mini-2024-07-18",
@@ -74,7 +74,7 @@ def subject_sum(api_keys: ApiKeys, group_data, data):
     prompt = f"グループの情報:{group_data},会話内容:{data}"
 
     # dataが会話内内、会話内容の要約を返します
-    client = OpenAI(api_key=api_keys.openapi_api_key)
+    client = OpenAI(api_key=api_keys.openai_api_key)
     # apikeyを入力
     completion = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
@@ -114,6 +114,6 @@ if __name__ == "__main__":
         "OPENAI_API_KEY"
     )  # TODO: テストの際には.envファイルにAPIキーを記述
     NEWSAI_KEY = os.getenv("SEARCH_API_KEY")  # NOET: SEARCH_API_KEYはなくても動作します
-    api_keys = ApiKeys(openapi_api_key=OPENAI_API_KEY, search_api_key=NEWSAI_KEY)
+    api_keys = ApiKeys(openai_api_key=OPENAI_API_KEY, search_api_key=NEWSAI_KEY)
 
     voice_recognition_func(api_keys, talk_data)

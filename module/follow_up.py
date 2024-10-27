@@ -14,7 +14,7 @@ class FollowUpQuestions(BaseModel):
 
 # NOTE:自己紹介してもらった内容から、追加の質問があった場合に返答する関数
 def AI_follow_up_questions(api_keys: ApiKeys, chat):
-    client = OpenAI(api_key=api_keys.openapi_api_key)
+    client = OpenAI(api_key=api_keys.openai_api_key)
     system_prompt = """
         あなたは、ユーザーの自己紹介をもとに追加質問を生成するアシスタントです。ユーザーの自己紹介が不十分な場合、関連する情報を補完するための一般的な質問を以下の形式で提示してください。質問が不要な場合は「false」を返してください。
 
@@ -46,6 +46,6 @@ if __name__ == "__main__":
     OPENAI_API_KEY = os.getenv(
         "OPENAI_API_KEY"
     )  # TODO: テストの際には.envファイルにAPIキーを記述
-    api_keys = ApiKeys(openapi_api_key=OPENAI_API_KEY, search_api_key="")
+    api_keys = ApiKeys(openai_api_key=OPENAI_API_KEY, search_api_key="")
     chat = "私は、東京都在住の大学生です。趣味は読書で、最近は小説をよく読んでいます。"
     print(AI_follow_up_questions(api_keys, chat))

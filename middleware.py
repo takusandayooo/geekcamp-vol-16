@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class ApiKeys(BaseModel):
-    openapi_api_key: str
+    openai_api_key: str
     search_api_key: str = Field(default="")
 
 

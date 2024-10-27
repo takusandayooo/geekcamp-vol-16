@@ -34,7 +34,7 @@ def split_groups_by(
 
     intro_json: str = _IntroductionList(introductions=intros).model_dump_json()
 
-    client = OpenAI(api_key=api_keys.openapi_api_key)
+    client = OpenAI(api_key=api_keys.openai_api_key)
     response = client.beta.chat.completions.parse(
         model="gpt-4o-mini-2024-07-18",
         response_format=_GroupList,
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     assert openai_api_key is not None
     search_api_key = os.getenv("SEARCH_API_KEY")
     assert search_api_key is not None
-    api_keys = ApiKeys(openapi_api_key=openai_api_key, search_api_key=search_api_key)
+    api_keys = ApiKeys(openai_api_key=openai_api_key, search_api_key=search_api_key)
 
     data = [
         Introduction(
