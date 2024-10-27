@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
@@ -9,138 +8,142 @@
       href="{{ url_for('static', filename='voice_recognition.css') }}"
     />
     <title>おすすめ機能</title>
-</head>
+  </head>
 
-<body>
-    <h1>おすすめ機能</h1>
+  <body>
+    <div class="h1">
+      <h1>おすすめ機能</h1>
+    </div>
 
-    <table>
+    <div class="center">
+      <table>
         <tr>
-            <td>
-                <button class="custom-button" id="voice-on-button" onclick="voiceOnText()">
-                    録音開始ボタン
-                </button>
-            </td>
-            <td>
-                <button class="custom-button" id="voice-off-button" onclick="voiceOffText()">
-                    録音停止ボタン
-                </button>
-            </td>
+          <td>
+            <button
+              class="custom-button"
+              id="voice-on-button"
+              onclick="voiceOnText()"
+            >
+              録音開始ボタン
+            </button>
+          </td>
+          <td>
+            <button
+              class="custom-button"
+              id="voice-off-button"
+              onclick="voiceOffText()"
+            >
+              録音停止ボタン
+            </button>
+          </td>
         </tr>
-    </table>
+      </table>
+    </div>
 
     <div class="content">
       <p>文字起こし内容</p>
     </div>
+
     <div class="content">
       <div id="non-message-content"></div>
     </div>
 
-    <button class="custom-button" onclick="displayText()">
+    <div class="text-container">
+      <div class="voicecontent">
+        <div id="non-voice-content"></div>
+      </div>
+    </div>
+
+    <div class="center">
+      <button class="osusume-button" onclick="displayText()">
         おすすめボタン
-    </button>
-
-    <p>おすすめ内容</p>
-    <div id="non-text-content"></div>
-
-    <style>
-        .custom-button {
-            background-color: #4caf50;
-            /*緑色 */
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .custom-button:hover {
-            background-color: #45a049;
-            /* ホバー時の色 */
-        }
-    </style>
+      </button>
+    </div>
+    <div class="content">
+      <p>おすすめ内容</p>
+    </div>
+    <div class="center">
+      <div id="non-text-content"></div>
+    </div>
 
     <script>
-        var flag = 0;
-        let speech;
-        allvoice_text = "";
+      var flag = 0;
+      let speech;
+      allvoice_text = "";
 
-        function voiceOnText() {
-            if (flag === 0) {
-                // 録音がオフの場合のみ開始
-                flag = 1; // 録音中フラグを立てる
-                speech = new webkitSpeechRecognition(); // 音声認識の準備
-                speech.lang = "ja-JP";
+      function voiceOnText() {
+        if (flag === 0) {
+          // 録音がオフの場合のみ開始
+          flag = 1; // 録音中フラグを立てる
+          speech = new webkitSpeechRecognition(); // 音声認識の準備
+          speech.lang = "ja-JP";
 
-                // 音声認識のイベントハンドラ
-                speech.onstart = function () {
-                    document.getElementById("non-message-content").innerText =
-                        "録音中...";
+          // 音声認識のイベントハンドラ
+          speech.onstart = function () {
+            document.getElementById("non-message-content").innerText =
+              "録音中...";
+          };
+
+          speech.onresult = function (e) {
+            voice_text = e.results[0][0].transcript; // 音声認識の結果を取得
+            allvoice_text += voice_text;
+            document.getElementById("non-message-content").innerText =
+              "認識結果";
+            document.getElementById("non-voice-content").innerText +=
+              voice_text + "\n";
+            console.log(allvoice_text);
+          };
+
+          /*
+                speech.onerror = function(e) {
+                    console.error("音声認識エラー: ", e);
+                    document.getElementById("non-message-content").innerText = "エラーが発生しました。";
                 };
+                */
 
-                speech.onresult = function (e) {
-                    voice_text = e.results[0][0].transcript; // 音声認識の結果を取得
-                    allvoice_text += voice_text;
-                    document.getElementById("non-message-content").innerText =
-                        "認識結果";
-                    document.getElementById("non-voice-content").innerText +=
-                        voice_text + "\n";
-                    console.log(allvoice_text);
-                };
-
-                /*
-                    speech.onerror = function(e) {
-                        console.error("音声認識エラー: ", e);
-                        document.getElementById("non-message-content").innerText = "エラーが発生しました。";
-                    };
-                    */
-
-                speech.onend = function () {
-                    document.getElementById("non-message-content").innerText +=
-                        " 録音終了。";
-                    if (flag == 1) {
-                        speech.start();
-                    } else {
-                    }
-                };
-
-                // 音声認識をスタート
-                speech.start();
+          speech.onend = function () {
+            if (flag == 1) {
+              speech.start();
             } else {
-                document.getElementById("non-message-content").innerText =
-                    "既に録音中です。録音を停止してから再度開始してください。";
             }
-        }
+          };
 
-        function voiceOffText() {
-            if (flag === 1) {
-                // 録音中の場合のみ停止
-                flag = 0; // 録音中フラグをリセット
-                speech.stop(); // 音声認識を停止
-                document.getElementById("non-message-content").innerText =
-                    " 録音終了。";
-            } else {
-                document.getElementById("non-message-content").innerText =
-                    "まず録音ボタンを押してね";
-            }
+          // 音声認識をスタート
+          speech.start();
+        } else {
+          document.getElementById("non-message-content").innerText =
+            "既に録音中です。録音を停止してから再度開始してください。";
         }
+      }
 
-        async function displayText() {
-            let result = await fetch("/voice_recognition", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    result: allvoice_text,
-                }),
-            });
-            let data = await result.json();
-            const text = data.result.join("\n");
-            document.getElementById("non-text-content").innerText = text;
+      function voiceOffText() {
+        if (flag === 1) {
+          // 録音中の場合のみ停止
+          flag = 0; // 録音中フラグをリセット
+          speech.stop(); // 音声認識を停止
+
+          document.getElementById("non-message-content").innerText =
+            " 録音終了。";
+        } else {
+          document.getElementById("non-message-content").innerText =
+            "まず録音ボタンを押してね";
         }
+      }
+
+      async function displayText() {
+        let result = await fetch("/voice_recognition", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            result: allvoice_text,
+          }),
+        });
+        let data = await result.json();
+        const text = data.result.join("\n");
+        document.getElementById("non-text-content").innerText = text;
+      }
     </script>
-</body>
-
+  </body>
 </html>
