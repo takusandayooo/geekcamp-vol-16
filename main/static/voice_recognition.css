@@ -1,0 +1,84 @@
+/* styles.css */
+.custom-button {
+    background-color: #ffc679;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.custom-button:hover {
+    background-color: #ffbc61; /* ホバー時の色 */
+}
+
+.osusume-button {
+    background-color: #f99292;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.osusume-button:hover {
+    background-color: #fa8282; /* ホバー時の色 */
+}
+
+.center {
+    display: flex;
+    justify-content: center;  /* 水平方向の中央揃え */
+    align-items: center;      
+    justify-content:space-around;
+}
+
+.text-container {
+    border: 2px solid #ffbc61; 
+    border-radius: 8px;       
+    padding: 10px;            
+    max-width: 600px;        
+    margin: 0 auto 50px auto;     
+    background-color: #f9f9f9; /*テキストボックスの背景色*/
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+h1 {
+    background-color: #ffc679;  /*見出し*/
+    color: white;               
+    padding: 15px;            
+    border-radius: 5px;        
+    text-align: center;         
+    display: flex;
+    justify-content: center;    
+    align-items: center;         
+    margin: 0 0 40px 0;          
+}
+
+body {
+    background-color: #fff4e0; /*背景色*/
+    margin: 0;                 
+    font-family: Arial, sans-serif; 
+}
+
+.content {
+    color: #ffc679; 
+    font-weight: bold; /*太字*/
+    display: flex;
+    justify-content: center;  /* 水平方向の中央揃え */
+    align-items: center;
+}
+
+.voicecontent {
+    color: #ffc679; 
+    font-weight: bold; /*太字*/
+}
+
+/*
+.messagecontent {
+    color: #ffc679; /* 好きな色を指定 (例: 鮮やかなオレンジ) 
+    display: flex;
+    justify-content: center;  /* 水平方向の中央揃え 
+    align-items: center;
+}
+
+*/
