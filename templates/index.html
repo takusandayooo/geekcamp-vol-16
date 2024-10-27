@@ -85,7 +85,11 @@
             padding: 0 40px;
         }
 
-
+        /* フォントの変更 */
+        .whywebuildit-heading,
+        .whywebuildit-text {
+            font-family: 'Sriracha', cursive;
+        }
 
         .achievements .whywebuildit .whywebuildit-heading {
             font-size: 20px;
@@ -127,7 +131,7 @@
         a.btn--orange {
             color: #faf5f5;
             background-color: #eb6100;
-            Text-decoration: none
+            text-decoration: none
         }
 
         a.btn--orange:hover {
@@ -142,37 +146,154 @@
         }
 
         a.btn--circle {
-
-
             border-radius: 50%;
             line-height: 130px;
             font-size: 20px;
             width: 150px;
             height: 150px;
             padding: 0;
-
         }
+
+        .container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-signin {
+            padding: 10px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .tate {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 豪華な入力欄のデザイン */
+        input[type="password"] {
+            width: 300px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            font-size: 16px;
+            outline: none;
+            background: linear-gradient(135deg, #f0f0f0, #fafafa);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        input[type="password"]:focus {
+            border-color: #5edaf0;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #e6f7ff, #f0faff);
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        a {
+            
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #007bff;
+        }
+
     </style>
+</head>
+
+<body>
     <main>
         <div class="intro">
-            <h1>サービス名（仮）へようこそ</h1>
-            <p>このウェブサイトではあなたの飲み会をより楽しいものにします</p>
-            <a href="/follow_up" class="btn btn--orange btn--circle btn--circle-a btn--shadow">自己紹介をする</a>
+            <h1>飲みコネクト</h1>
+            <p>あなたたちの交流をもっと楽しく、そして深いつながりを築ける場にします。<br>
+                AIによる最適なグループ分けや、会話の中で新しい話題を提案することで、これまで以上に充実したコミュニケーションをサポートします。</p>
+
+            <div class="container">
+                <div class="tate">
+                    <div class="container">
+                        <label for="openapi">Open APIキー(必須):</label>
+                        <input type="password" id="openapi" name="openapi" />
+                    </div>
+
+                    <div class="container">
+                        <label for="newsapi">News APIキー(任意):</label>
+                        <input type="password" id="newsapi" name="newsapi" />
+                    </div>
+                    <div id="aleat"></div>
+                    <a href="https://platform.openai.com/docs/overview" target="_blank">OpenAPIキーの取得はこちら</a>
+                    <a href="https://newsapi.org/" target="_blank">NewsAPIキーの取得はこちら</a>
+
+                </div>
+
+                <a href="javascript:void(0);" id="followupLink" class="btn btn--orange btn--circle btn--circle-a btn--shadow">自己紹介をする</a>
+
+            </div>
+
+            <script>
+                let flag = 0;
+
+                const openapiInput = document.getElementById("openapi");
+                const Link = document.getElementById("followupLink");
+
+                openapiInput.addEventListener("input", function() {
+                    if (openapiInput.value.trim() !== "") {
+                        flag = 1;
+                    } else {
+                        flag = 0;
+                    }
+                });
+
+                Link.addEventListener("click", function() {
+                    if (flag === 1) {
+                        window.location.href = "/follow_up";
+                    } else {
+                        document.getElementById("aleat").innerText = "Open APIキーを入力してください"
+                    }
+                });
+            </script>
         </div>
+
+
+
         <div class="achievements">
             <div class="whywebuildit">
                 <i class="fas fa-atom"></i>
-                <p class="whywebuildit-heading">Projects</p>
+                <p class="whywebuildit-heading">➀自己紹介から始まる、最適なグループ分け</p>
                 <p class="whywebuildit-text">
-                    【10月_Vol.16】ハッカソン技育CAMP2024で行われた、即席チームでアプリを開発しました。自己紹介の情報をもとにグループ分けを行い、会話内容に沿った話題を提供をします。</p>
+
+                    私たちのサービスでは、AIがあなたの音声データを分析し、性格、バックグラウンド、趣味や興味を把握。<br>
+                    これに基づいて、共通点を持つ他のユーザーと自動的にマッチングします。同じ話題で盛り上がれる人々と、自然な会話がすぐにスタート。</p>
+                AIが作成するグループは、ただの偶然の集まりではありません。共通の話
+題を持つ仲間と一緒だからこそ、初対面でもリラックスして話せます。<br>
+                    短時間で深いつながりを作り、新しい関係を築けるのがこのサービスの魅力です。
             </div>
+            <div class="whywebuildit">
+                <i class="fas fa-atom"></i>
+                <p class="whywebuildit-heading">⓶会話がもっと広がる、新しい話題の提案。</p>
+                <p class="whywebuildit-text">
+                    私たちのサービスは、NewsAPIとChatGPTで知られるOpenAIのAPIを活用し、会話内容をリアルタイムで解析して最適な話題を提供します。<br>
+                    NewsAPIを通じて、最新のニュースやトレンドを瞬時にピックアップし、会話に関連するタイムリーなトピックを提案。<br>
+                
+                    また、ChatGPTの高度な言語モデルにより、参加者の趣味や興味に基づいたカスタマイズされた話題を提供します。<br>
+                    このAIの話題提案によって、共通の話題で会話がスムーズに続き、短時間で深い交流を促進します。<br>
+                    </div>
 
         </div>
         </div>
         <div class="about-me">
             <div class="about-me-text">
                 <h2>About US</h2>
-                <p>私たちは第16回ハッカソンに出場した、計5人で構成される「聞き上手」です。</p>
+                <p>私たちは、エンジニアの卵として日々学んでいる大学生チームです。<br>
+                    技育CAMP2024のハッカソンで出会い、それぞれのスキルを活かしながら、AI技術を使った革新的なアプリを開発しました。<br>
+                    私たちの目標は、テクノロジーを通じて人々の交流をより楽しく、そして深いつながりを築けるものにすることです。<br>
             </div>
             <img src="{{url_for('static',filename='77B39ED1-B839-4048-94ED-02E452E2DABE.jpg')}}" alt="me">
         </div>
