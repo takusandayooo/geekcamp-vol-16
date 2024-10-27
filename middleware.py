@@ -1,9 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ApiKeys(BaseModel):
     openapi_api_key: str
-    search_api_key: str
+    search_api_key: str = Field(default="")
 
 
 def check_api_keys(request) -> dict | None:
