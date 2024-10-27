@@ -124,6 +124,7 @@
       });
 
       follow_up.addEventListener("click", async function () {
+        api_keys = JSON.parse(localStorage.getItem("api_keys"));
         let result = await fetch("/follow_up", {
           method: "POST",
           headers: {
@@ -131,6 +132,7 @@
           },
           body: JSON.stringify({
             result: allResponses,
+            api_keys: api_keys,
           }),
         });
         let data = await result.json();

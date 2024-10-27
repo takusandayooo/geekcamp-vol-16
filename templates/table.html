@@ -101,12 +101,13 @@
                     return [];
                 }
 
+                api_keys = JSON.parse(localStorage.getItem("api_keys"));
                 const response = await fetch("/table", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({data: introductions}),
+                    body: JSON.stringify({data: introductions, api_keys: api_keys}),
                 });
                 response_json = await response.json();
                 return response_json.result;

@@ -140,6 +140,7 @@
       }
 
       async function displayText() {
+        api_keys = JSON.parse(localStorage.getItem("api_keys"));
         const group = document.getElementById("group_select").value;
         let result = await fetch("/voice_recognition", {
           method: "POST",
@@ -149,6 +150,7 @@
           body: JSON.stringify({
             result: allvoice_text,
             group: group,
+            api_keys: api_keys,
           }),
         });
         let data = await result.json();
