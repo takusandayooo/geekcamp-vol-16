@@ -1,34 +1,23 @@
-.custom-button {
+.custom-button {                /*ボタンの設定*/
     background-color: #ffc679;
     color: white;
     padding: 20px 40px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
 }
 .custom-button:hover {
     background-color: #ffbc61; /* ホバー時の色 */
 }
 
-.osusume-button {
-    background-color: #f99292;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-.osusume-button:hover {
-    background-color: #fa8282; /* ホバー時の色 */
-}
-
-.center {
+.center {               /* 中央に配置させる*/
     display: flex;
-    justify-content: center;  /* 水平方向の中央揃え */
+    justify-content: center;  
     align-items: center;      
     justify-content:space-around;
+    padding: 20px;
+    
 }
 
 .text-container {
@@ -50,7 +39,17 @@ h1 {
     display: flex;
     justify-content: center;    
     align-items: center;         
-    margin: 0 0 40px 0;          
+    margin: 0 0 40px 0; 
+    border-bottom: 2px solid #ffa500;         
+}
+h3{
+    color: rgb(255, 255, 255);
+    background-color: #ffc679;   
+    padding: 15px;                   
+    text-align: center;         
+    display: flex;
+    justify-content: center;    
+    align-items: center;            
 }
 
 body {
@@ -83,18 +82,24 @@ button.btn {
     border-radius: 0.5rem;
 }
 button.btn--yellow {
-    color: #000;
+    color: #ffffff;
     background-color: #ffc679;
     border-bottom: 5px solid #ffa500;
 }
 
 button.btn--yellow:hover {
     margin-top: 3px;
-    color: #000;
+    color: #ffffff;
     background: #ffc679;
     border-bottom: 2px solid #ffa500;
 }
 p {
     margin-top: 20px;
     margin-bottom: 10px;
+}
+div{
+    padding-top:    30px;  /* 上だけ指定 */
+    padding-bottom: 30px;  /* 下だけ指定 */
+    
+    font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
 }
