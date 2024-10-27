@@ -62,7 +62,6 @@
         // 録音を続けるためのフラグ
         let isRecording = false;
 
-<<<<<<< HEAD
         // 変数の初期化
         const startbtn = document.getElementById("startbtn");
         const stopbtn = document.getElementById("stopbtn");
@@ -72,16 +71,6 @@
         const content = document.getElementById("content");
         const follow_up = document.getElementById("follow_up");
         const follow_up_content = document.getElementById("follow_up_content");
-=======
-      // 変数の初期化
-      const startbtn = document.getElementById("startbtn");
-      const stopbtn = document.getElementById("stopbtn");
-      const nextbtn = document.getElementById("next");
-      const sendbtn = document.getElementById("send");
-      const content = document.getElementById("content");
-      const follow_up = document.getElementById("follow_up");
-      const follow_up_content = document.getElementById("follow_up_content");
->>>>>>> 4bffac4 (remove: 不要なボタンと不要なファイルを削除)
 
         let allResponses = []; // 全ユーザーの音声認識結果を保存する多次元配列
         let currentUserIndex = 0; // 現在のユーザーのインデックス
@@ -89,7 +78,6 @@
         // 回答リストを初期化
         allResponses[currentUserIndex] = [];
 
-<<<<<<< HEAD
         // 録音開始ボタンを押した際の音声認識開始
         startbtn.addEventListener("click", function () {
             isRecording = true;
@@ -160,67 +148,6 @@
             // 改行を追加した文字列を作成
             let follow_up_text = data.result.join("\n");
             follow_up_content.innerText = follow_up_text;
-=======
-      // 録音開始ボタンを押した際の音声認識開始
-      startbtn.addEventListener("click", function () {
-        isRecording = true;
-        speech.start();
-      });
-
-      // 録音停止ボタンを押した際の音声認識停止
-      stopbtn.addEventListener("click", function () {
-        isRecording = false;
-        speech.stop();
-      });
-      // 音声認識結果を取得した際の処理
-      speech.addEventListener("result", function (e) {
-        const text = e.results[0][0].transcript;
-        allResponses[currentUserIndex].push(text); // 配列に結果を追加
-        displayResponses();
-      });
-
-      // 音声認識が停止されたときの処理
-      speech.addEventListener("end", function () {
-        if (isRecording) {
-          speech.start(); // 停止ボタンが押されるまで再開する
-        }
-      });
-
-      // 「次の人」ボタンを押した際の処理
-      nextbtn.addEventListener("click", function () {
-        currentUserIndex++; // 次のユーザーに移動
-        allResponses[currentUserIndex] = []; // 配列を追加
-        displayResponses();
-        follow_up_content.innerText="";
-      });
-
-      // 現在のすべての応答を表示する関数
-      function displayResponses() {
-        content.innerText =
-          "現在の応答（ユーザー" +
-          (currentUserIndex + 1) +
-          "）: " +
-          allResponses[currentUserIndex].join(", ");
-      }
-
-      // 「送信!」ボタンを押した際の処理
-      sendbtn.addEventListener("click", function () {
-        // `allResponses` を JSON 文字列として `localStorage` に保存
-        localStorage.setItem("allResponses", JSON.stringify(allResponses));
-        // `table.html` にリダイレクト
-        window.location.href = "/table";
-      });
-
-      follow_up.addEventListener("click", async function () {
-        let result = await fetch("/follow_up", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            result: allResponses,
-          }),
->>>>>>> 4bffac4 (remove: 不要なボタンと不要なファイルを削除)
         });
 
     </script>
