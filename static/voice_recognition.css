@@ -38,6 +38,11 @@
     justify-content:space-around;
     margin: 0 0 40px 0; 
 }
+
+.center2:hover {
+    background-color: #ffbc61; /* ホバー時の色 */
+}
+
 .select-button {
     background-color: #ffc679;
     color: white;
