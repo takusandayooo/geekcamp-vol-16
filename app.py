@@ -88,7 +88,7 @@ def voice_recognition():
                     group_data = group.overview
                     break
             group_data = group_data[0] if group_data else None
-        result = voice_recognition_func(api_keys, data["result"])
+        result = voice_recognition_func(api_keys, data["group"], data["result"])
         return jsonify({"status": "success", "result": result})
 
 
