@@ -1,0 +1,14 @@
+[project]
+name = "geekcamp-vol-16"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "flask>=3.0.3",
+    "openai>=1.52.2",
+    "pandas>=2.2.3",
+    "pydantic>=2.9.2",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.3",
+]

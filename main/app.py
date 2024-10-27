@@ -1,14 +1,15 @@
 from dotenv import load_dotenv
 from flask import Flask, abort, jsonify, render_template, request
-from module.follow_up import AI_follow_up_questions
-import os
-from module.group_split import (
+from pydantic import ValidationError
+
+from .middleware import ApiKeys, check_api_keys
+from .module.follow_up import AI_follow_up_questions
+from .module.group_split import (
     Group,
     Introduction,
     split_groups_by,
 )
-from module.recognition_main import voice_recognition_func
-from pydantic import ValidationError
+from .module.recognition_main import voice_recognition_func
 
 load_dotenv()
 
