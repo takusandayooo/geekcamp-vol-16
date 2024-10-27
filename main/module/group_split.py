@@ -1,6 +1,10 @@
-from main.middleware import ApiKeys
+import os
+
+from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
+
+from main.middleware import ApiKeys
 
 
 class Group(BaseModel):
@@ -54,3 +58,33 @@ def split_groups_by(
     if group_list is None:
         return None
     return group_list.groups
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    assert openai_api_key is not None
+    search_api_key = os.getenv("SEARCH_API_KEY")
+    assert search_api_key is not None
+    api_keys = ApiKeys(openapi_api_key=openai_api_key, search_api_key=search_api_key)
+
+    data = [
+        Introduction(
+            username="達郎", content="スポーツが好きでボクシングをやってます。"
+        ),
+        Introduction(
+            username="美咲",
+            content="最近、料理にハマっています。特に和食を作るのが好きです。",
+        ),
+        Introduction(
+            username="健太",
+            content="アウトドアが大好きで、週末はよくハイキングに行きます。",
+        ),
+        Introduction(
+            username="真理子", content="読書が趣味で、特にファンタジー小説が好きです。"
+        ),
+        Introduction(
+            username="翔太", content="映画鑑賞が趣味で、特にアクション映画が好きです。"
+        ),
+    ]
+    print(split_groups_by(api_keys, data))
