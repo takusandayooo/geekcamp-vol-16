@@ -13,10 +13,15 @@ from .module.recognition_main import voice_recognition_func
 
 load_dotenv()
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") #TODO: 本番環境にデプロイする際にはここをコメントアウト
-SEARCH_API_KEY = os.getenv("SEARCH_API_KEY")
 
 app = Flask(__name__)
+
+
+@app.before_request
+def require_api_keys():
+    err = check_api_keys(request)
+    if err:
+        return jsonify({"error": err["desc"]}), err["status_code"]
 
 
 @app.route("/")
@@ -29,7 +34,8 @@ def follow_up():
     if request.method == "POST":
         data = request.get_json()
         print(data)
-        result = AI_follow_up_questions(data["result"],OPENAI_API_KEY)
+        api_keys = ApiKeys(**data["api_keys"])
+        result = AI_follow_up_questions(api_keys, data["result"])
         print(result)
         return jsonify({"status": "success", "result": result})
     else:
@@ -42,6 +48,7 @@ def table():
         return render_template("table.html")
     else:
         body = request.get_json()
+        api_keys = ApiKeys(**body["api_keys"])
         try:
             intros = [Introduction(**intro) for intro in body["data"]]
         except ValidationError:
@@ -49,7 +56,7 @@ def table():
                 500, "サーバー内で問題が生じました。時間を空けてから実行してください。"
             )
 
-        groups: list[Group] | None = split_groups_by(intros,OPENAI_API_KEY)
+        groups: list[Group] | None = split_groups_by(api_keys, intros)
         if groups is None:
             return jsonify({"result": []})
 
@@ -63,8 +70,9 @@ def voice_recognition():
         return render_template("voice_recognition.html")
     else:
         data = request.get_json()
+        api_keys = ApiKeys(**data["api_keys"])
         print(data["result"])
-        result = voice_recognition_func(data["result"],OPENAI_API_KEY,SEARCH_API_KEY)
+        result = voice_recognition_func(api_keys, data["result"])
         return jsonify({"status": "success", "result": result})
 
 
