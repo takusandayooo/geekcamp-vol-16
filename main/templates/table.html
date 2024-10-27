@@ -117,6 +117,11 @@
             //   value: 発言内容のテキストの配列
             //          ["内容１", "内容２"]
             const allResponses = JSON.parse(localStorage.getItem("allResponses")) || [];
+            // introductionsは以下を要素としてもつリスト
+            // {
+            //   "username": ユーザー名
+            //   "content": 自己紹介文の内容
+            // }
             const introductions = createIntroductions(allResponses);
             // groupsは以下を要素としてもつリスト
             // {
