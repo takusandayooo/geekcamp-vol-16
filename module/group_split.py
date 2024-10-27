@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
 
-from main.middleware import ApiKeys
+from middleware import ApiKeys
 
 
 class Group(BaseModel):

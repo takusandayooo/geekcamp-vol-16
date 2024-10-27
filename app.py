@@ -2,14 +2,14 @@ from dotenv import load_dotenv
 from flask import Flask, abort, jsonify, render_template, request
 from pydantic import ValidationError
 
-from .middleware import ApiKeys, check_api_keys
-from .module.follow_up import AI_follow_up_questions
-from .module.group_split import (
+from middleware import ApiKeys, check_api_keys
+from module.follow_up import AI_follow_up_questions
+from module.group_split import (
     Group,
     Introduction,
     split_groups_by,
 )
-from .module.recognition_main import voice_recognition_func
+from module.recognition_main import voice_recognition_func
 
 load_dotenv()
 
@@ -60,7 +60,9 @@ def table():
 
         groups: list[Group] | None = split_groups_by(api_keys, intros)
         global group_table
-        group_table=groups#NOTE: おすすめ機能でグループ情報を使うためにグローバル変数に格納
+        group_table = (
+            groups  # NOTE: おすすめ機能でグループ情報を使うためにグローバル変数に格納
+        )
         if groups is None:
             return jsonify({"result": []})
 
@@ -76,10 +78,10 @@ def voice_recognition():
         data = request.get_json()
         api_keys = ApiKeys(**data["api_keys"])
         print(data["result"])
-        print(data["result"],data["group"])
-        group_name=data["group"]
-        if group_name== "":
-            group_data="グループデータはありません"
+        print(data["result"], data["group"])
+        group_name = data["group"]
+        if group_name == "":
+            group_data = "グループデータはありません"
         else:
             for group in group_table:
                 if group.group_name == group_name:

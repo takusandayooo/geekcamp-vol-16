@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
 
-from main.middleware import ApiKeys
+from middleware import ApiKeys
 
 
 def news_sum(api_keys: ApiKeys, kensaku=""):
@@ -69,10 +69,9 @@ def subject_provider(api_keys: ApiKeys, kaiwa, news=""):
     return json_data
 
 
-def subject_sum(api_keys: ApiKeys,group_data, data):
+def subject_sum(api_keys: ApiKeys, group_data, data):
     # print('話題関数はじめ')
-    prompt =f"グループの情報:{group_data},会話内容:{data}"
-
+    prompt = f"グループの情報:{group_data},会話内容:{data}"
 
     # dataが会話内内、会話内容の要約を返します
     client = OpenAI(api_key=api_keys.openapi_api_key)
@@ -92,9 +91,9 @@ def subject_sum(api_keys: ApiKeys,group_data, data):
     return completion.choices[0].message.content
 
 
-def voice_recognition_func(api_keys: ApiKeys,group_data, talk_data):
+def voice_recognition_func(api_keys: ApiKeys, group_data, talk_data):
     # 会話データを入力
-    pro = subject_sum(api_keys,group_data, talk_data)
+    pro = subject_sum(api_keys, group_data, talk_data)
     # 会話の内容を検索プロンプトに変更
     print(pro)
     news_recent = news_sum(api_keys, kensaku=pro)

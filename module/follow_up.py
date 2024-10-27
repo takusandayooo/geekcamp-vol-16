@@ -1,10 +1,11 @@
-from openai import OpenAI
-from pydantic import BaseModel
 import json
-from dotenv import load_dotenv
 import os
 
-from main.middleware import ApiKeys
+from dotenv import load_dotenv
+from openai import OpenAI
+from pydantic import BaseModel
+
+from middleware import ApiKeys
 
 
 class FollowUpQuestions(BaseModel):
