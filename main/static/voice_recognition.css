@@ -31,6 +31,22 @@
     align-items: center;      
     justify-content:space-around;
 }
+.center2 {
+    display: flex;
+    justify-content: center;  /* 水平方向の中央揃え */
+    align-items: center;      
+    justify-content:space-around;
+    margin: 0 0 40px 0; 
+}
+.select-button {
+    background-color: #ffc679;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
 
 .text-container {
     border: 2px solid #ffbc61; 

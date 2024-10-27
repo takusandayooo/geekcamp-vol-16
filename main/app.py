@@ -14,6 +14,8 @@ from .module.recognition_main import voice_recognition_func
 load_dotenv()
 
 
+group_table: list[Group] = []
+
 app = Flask(__name__)
 
 
@@ -57,6 +59,8 @@ def table():
             )
 
         groups: list[Group] | None = split_groups_by(api_keys, intros)
+        global group_table
+        group_table=groups#NOTE: おすすめ機能でグループ情報を使うためにグローバル変数に格納
         if groups is None:
             return jsonify({"result": []})
 
@@ -67,11 +71,21 @@ def table():
 @app.route("/voice_recognition", methods=["POST", "GET"])
 def voice_recognition():
     if request.method == "GET":
-        return render_template("voice_recognition.html")
+        return render_template("voice_recognition.html", group_table=group_table)
     else:
         data = request.get_json()
         api_keys = ApiKeys(**data["api_keys"])
         print(data["result"])
+        print(data["result"],data["group"])
+        group_name=data["group"]
+        if group_name== "":
+            group_data="グループデータはありません"
+        else:
+            for group in group_table:
+                if group.group_name == group_name:
+                    group_data = group.overview
+                    break
+            group_data = group_data[0] if group_data else None
         result = voice_recognition_func(api_keys, data["result"])
         return jsonify({"status": "success", "result": result})
 

@@ -14,6 +14,15 @@
     <div class="h1">
       <h1>おすすめ機能</h1>
     </div>
+    <div class="center2">
+      <select name="group" id="group_select" class="select-button">
+        <option value="">グループを入力してください</option>
+        {% for group in group_table %}
+        <option value="{{ group.group_name }}">{{ group.group_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
 
     <div class="center">
       <table>
@@ -131,6 +140,7 @@
       }
 
       async function displayText() {
+        const group = document.getElementById("group_select").value;
         let result = await fetch("/voice_recognition", {
           method: "POST",
           headers: {
@@ -138,6 +148,7 @@
           },
           body: JSON.stringify({
             result: allvoice_text,
+            group: group,
           }),
         });
         let data = await result.json();

@@ -69,8 +69,10 @@ def subject_provider(api_keys: ApiKeys, kaiwa, news=""):
     return json_data
 
 
-def subject_sum(api_keys: ApiKeys, data):
+def subject_sum(api_keys: ApiKeys,group_data, data):
     # print('話題関数はじめ')
+    prompt =f"グループの情報:{group_data},会話内容:{data}"
+
 
     # dataが会話内内、会話内容の要約を返します
     client = OpenAI(api_key=api_keys.openapi_api_key)
@@ -82,7 +84,7 @@ def subject_sum(api_keys: ApiKeys, data):
                 "role": "system",
                 "content": "あなたは大学生で、飲み会に参加しています。会話内容を要約して、関係ありそうなニュースを検索するためのプロンプトを表示してください。検索するための空白は,ANDと入力して下さい。例;入力例;おなかすいたね;出力例;食べ物AND話題",
             },
-            {"role": "user", "content": data},
+            {"role": "user", "content": prompt},
         ],
     )
 
@@ -90,9 +92,9 @@ def subject_sum(api_keys: ApiKeys, data):
     return completion.choices[0].message.content
 
 
-def voice_recognition_func(api_keys: ApiKeys, talk_data):
+def voice_recognition_func(api_keys: ApiKeys,group_data, talk_data):
     # 会話データを入力
-    pro = subject_sum(api_keys, talk_data)
+    pro = subject_sum(api_keys,group_data, talk_data)
     # 会話の内容を検索プロンプトに変更
     print(pro)
     news_recent = news_sum(api_keys, kensaku=pro)
@@ -108,6 +110,7 @@ if __name__ == "__main__":
     talk_data = (
         "私は、東京都在住の大学生です。趣味は読書で、最近は小説をよく読んでいます。"
     )
+    group_data = "読書好き"
     OPENAI_API_KEY = os.getenv(
         "OPENAI_API_KEY"
     )  # TODO: テストの際には.envファイルにAPIキーを記述
