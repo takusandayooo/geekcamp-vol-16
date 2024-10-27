@@ -1,162 +1,153 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='voice_recognition.css') }}"
-    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='voice_recognition.css') }}" />
     <title>おすすめ機能</title>
-  </head>
+</head>
 
-  <body>
+<body>
     <div class="h1">
-      <h1>おすすめ機能</h1>
+        <h1>おすすめ機能</h1>
     </div>
     <div class="center2">
-      <select name="group" id="group_select" class="select-button">
-        <option value="">グループを入力してください</option>
-        {% for group in group_table %}
-        <option value="{{ group.group_name }}">{{ group.group_name }}</option>
-        {% endfor %}
-      </select>
+        <select name="group" id="group_select" class="select-button">
+            <option value="">グループを入力してください</option>
+            {% for group in group_table %}
+            <option value="{{ group.group_name }}">{{ group.group_name }}</option>
+            {% endfor %}
+        </select>
     </div>
 
 
     <div class="center">
-      <table>
-        <tr>
-          <td>
-            <button
-              class="custom-button"
-              id="voice-on-button"
-              onclick="voiceOnText()"
-            >
-              録音開始ボタン
-            </button>
-          </td>
-          <td>
-            <button
-              class="custom-button"
-              id="voice-off-button"
-              onclick="voiceOffText()"
-            >
-              録音停止ボタン
-            </button>
-          </td>
-        </tr>
-      </table>
+        <table>
+            <tr>
+                <td>
+                    <button class="custom-button" id="voice-on-button" onclick="voiceOnText()">
+                        録音開始ボタン
+                    </button>
+                </td>
+                <td>
+                    <button class="custom-button" id="voice-off-button" onclick="voiceOffText()">
+                        録音停止ボタン
+                    </button>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <div class="content">
-      <p>文字起こし内容</p>
+        <p>文字起こし内容</p>
     </div>
 
     <div class="content">
-      <div id="non-message-content"></div>
+        <div id="non-message-content"></div>
     </div>
 
     <div class="text-container">
-      <div class="voicecontent">
-        <div id="non-voice-content"></div>
-      </div>
+        <div class="voicecontent">
+            <div id="non-voice-content"></div>
+        </div>
     </div>
 
     <div class="center">
-      <button class="osusume-button" onclick="displayText()">
-        おすすめボタン
-      </button>
+        <button class="osusume-button" onclick="displayText()">
+            おすすめボタン
+        </button>
     </div>
     <div class="content">
-      <p>おすすめ内容</p>
+        <p>おすすめ内容</p>
     </div>
     <div class="center">
-      <div id="non-text-content"></div>
+        <div id="non-text-content"></div>
     </div>
 
     <script>
-      var flag = 0;
-      let speech;
-      allvoice_text = "";
+        var flag = 0;
+        let speech;
+        allvoice_text = "";
 
-      function voiceOnText() {
-        if (flag === 0) {
-          // 録音がオフの場合のみ開始
-          flag = 1; // 録音中フラグを立てる
-          speech = new webkitSpeechRecognition(); // 音声認識の準備
-          speech.lang = "ja-JP";
+        function voiceOnText() {
+            if (flag === 0) {
+                // 録音がオフの場合のみ開始
+                flag = 1; // 録音中フラグを立てる
+                speech = new webkitSpeechRecognition(); // 音声認識の準備
+                speech.lang = "ja-JP";
 
-          // 音声認識のイベントハンドラ
-          speech.onstart = function () {
-            document.getElementById("non-message-content").innerText =
-              "録音中...";
-          };
-
-          speech.onresult = function (e) {
-            voice_text = e.results[0][0].transcript; // 音声認識の結果を取得
-            allvoice_text += voice_text;
-            document.getElementById("non-message-content").innerText =
-              "認識結果";
-            document.getElementById("non-voice-content").innerText +=
-              voice_text + "\n";
-            console.log(allvoice_text);
-          };
-
-          /*
-                speech.onerror = function(e) {
-                    console.error("音声認識エラー: ", e);
-                    document.getElementById("non-message-content").innerText = "エラーが発生しました。";
+                // 音声認識のイベントハンドラ
+                speech.onstart = function () {
+                    document.getElementById("non-message-content").innerText =
+                        "録音中...";
                 };
-                */
 
-          speech.onend = function () {
-            if (flag == 1) {
-              speech.start();
+                speech.onresult = function (e) {
+                    voice_text = e.results[0][0].transcript; // 音声認識の結果を取得
+                    allvoice_text += voice_text;
+                    document.getElementById("non-message-content").innerText =
+                        "認識結果";
+                    document.getElementById("non-voice-content").innerText +=
+                        voice_text + "\n";
+                    console.log(allvoice_text);
+                };
+
+                /*
+                      speech.onerror = function(e) {
+                          console.error("音声認識エラー: ", e);
+                          document.getElementById("non-message-content").innerText = "エラーが発生しました。";
+                      };
+                      */
+
+                speech.onend = function () {
+                    if (flag == 1) {
+                        speech.start();
+                    } else {
+                    }
+                };
+
+                // 音声認識をスタート
+                speech.start();
             } else {
+                document.getElementById("non-message-content").innerText =
+                    "既に録音中です。録音を停止してから再度開始してください。";
             }
-          };
-
-          // 音声認識をスタート
-          speech.start();
-        } else {
-          document.getElementById("non-message-content").innerText =
-            "既に録音中です。録音を停止してから再度開始してください。";
         }
-      }
 
-      function voiceOffText() {
-        if (flag === 1) {
-          // 録音中の場合のみ停止
-          flag = 0; // 録音中フラグをリセット
-          speech.stop(); // 音声認識を停止
+        function voiceOffText() {
+            if (flag === 1) {
+                // 録音中の場合のみ停止
+                flag = 0; // 録音中フラグをリセット
+                speech.stop(); // 音声認識を停止
 
-          document.getElementById("non-message-content").innerText =
-            " 録音終了。";
-        } else {
-          document.getElementById("non-message-content").innerText =
-            "まず録音ボタンを押してね";
+                document.getElementById("non-message-content").innerText =
+                    " 録音終了。";
+            } else {
+                document.getElementById("non-message-content").innerText =
+                    "まず録音ボタンを押してね";
+            }
         }
-      }
 
-      async function displayText() {
-        api_keys = JSON.parse(localStorage.getItem("api_keys"));
-        const group = document.getElementById("group_select").value;
-        let result = await fetch("/voice_recognition", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            result: allvoice_text,
-            group: group,
-            api_keys: api_keys,
-          }),
-        });
-        let data = await result.json();
-        const text = data.result.join("\n");
-        document.getElementById("non-text-content").innerText = text;
-      }
+        async function displayText() {
+            api_keys = JSON.parse(localStorage.getItem("api_keys"));
+            const group = document.getElementById("group_select").value;
+            let result = await fetch("/voice_recognition", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    result: allvoice_text,
+                    group: group,
+                    api_keys: api_keys,
+                }),
+            });
+            let data = await result.json();
+            const text = data.result.join("\n");
+            document.getElementById("non-text-content").innerText = text;
+        }
     </script>
-  </body>
+</body>
+
 </html>
