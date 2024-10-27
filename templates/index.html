@@ -197,7 +197,7 @@
         }
 
         a {
-            
+
             color: #0056b3;
             text-decoration: none;
         }
@@ -205,7 +205,6 @@
         a:hover {
             color: #007bff;
         }
-
     </style>
 </head>
 
@@ -227,35 +226,48 @@
                         <label for="newsapi">News APIキー(任意):</label>
                         <input type="password" id="newsapi" name="newsapi" />
                     </div>
+                    <button id="saveBtn">APIキーを保存する</button>
                     <div id="aleat"></div>
                     <a href="https://platform.openai.com/docs/overview" target="_blank">OpenAPIキーの取得はこちら</a>
                     <a href="https://newsapi.org/" target="_blank">NewsAPIキーの取得はこちら</a>
 
                 </div>
 
-                <a href="javascript:void(0);" id="followupLink" class="btn btn--orange btn--circle btn--circle-a btn--shadow">自己紹介をする</a>
+                <a href="javascript:void(0);" id="followupLink"
+                    class="btn btn--orange btn--circle btn--circle-a btn--shadow">自己紹介をする</a>
 
             </div>
 
             <script>
-                let flag = 0;
+                const saveBtn = document.getElementById("saveBtn");
+                saveBtn.addEventListener("click", () => {
+                    const openapiInput = document.getElementById("openapi");
+                    const newsapiInput = document.getElementById("newsapi");
+                    openai_api_key = openapiInput.value.trim()
+                    news_api_key = newsapiInput.value.trim()
 
-                const openapiInput = document.getElementById("openapi");
-                const Link = document.getElementById("followupLink");
-
-                openapiInput.addEventListener("input", function() {
-                    if (openapiInput.value.trim() !== "") {
-                        flag = 1;
-                    } else {
-                        flag = 0;
+                    if (openai_api_key === "") {
+                        document.getElementById("aleat").innerText = "Open APIキーを入力してください";
+                        return
                     }
-                });
 
-                Link.addEventListener("click", function() {
-                    if (flag === 1) {
+                    openapiInput.value = "";
+                    news_api_key.value = "";
+
+                    api_keys = {
+                        "openai_api_key": openai_api_key,
+                        "search_api_key": news_api_key,
+                    };
+                    localStorage.setItem("api_keys", JSON.stringify(api_keys));
+                })
+
+                const nextPageLink = document.getElementById("followupLink");
+                nextPageLink.addEventListener("click", function () {
+                    exists_api_keys = localStorage.getItem("api_keys") === null ? false : true;
+                    if (exists_api_keys) {
                         window.location.href = "/follow_up";
                     } else {
-                        document.getElementById("aleat").innerText = "Open APIキーを入力してください"
+                        document.getElementById("aleat").innerText = "Open APIキーを入力してください";
                     }
                 });
             </script>
@@ -272,8 +284,8 @@
                     私たちのサービスでは、AIがあなたの音声データを分析し、性格、バックグラウンド、趣味や興味を把握。<br>
                     これに基づいて、共通点を持つ他のユーザーと自動的にマッチングします。同じ話題で盛り上がれる人々と、自然な会話がすぐにスタート。</p>
                 AIが作成するグループは、ただの偶然の集まりではありません。共通の話
-題を持つ仲間と一緒だからこそ、初対面でもリラックスして話せます。<br>
-                    短時間で深いつながりを作り、新しい関係を築けるのがこのサービスの魅力です。
+                題を持つ仲間と一緒だからこそ、初対面でもリラックスして話せます。<br>
+                短時間で深いつながりを作り、新しい関係を築けるのがこのサービスの魅力です。
             </div>
             <div class="whywebuildit">
                 <i class="fas fa-atom"></i>
@@ -281,10 +293,10 @@
                 <p class="whywebuildit-text">
                     私たちのサービスは、NewsAPIとChatGPTで知られるOpenAIのAPIを活用し、会話内容をリアルタイムで解析して最適な話題を提供します。<br>
                     NewsAPIを通じて、最新のニュースやトレンドを瞬時にピックアップし、会話に関連するタイムリーなトピックを提案。<br>
-                
+
                     また、ChatGPTの高度な言語モデルにより、参加者の趣味や興味に基づいたカスタマイズされた話題を提供します。<br>
                     このAIの話題提案によって、共通の話題で会話がスムーズに続き、短時間で深い交流を促進します。<br>
-                    </div>
+            </div>
 
         </div>
         </div>
