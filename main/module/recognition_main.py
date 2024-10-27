@@ -6,13 +6,11 @@ import json
 import requests
 import pandas as pd
 
-load_dotenv()
 
 
-def news_sum(kensaku=""):
+
+def news_sum(newsAI_key,kensaku=""):
     # print('news')
-    newsAI_key = os.getenv("SEARCH_API_KEY")
-    # NewsAIのキーを代入
 
     headers = {"X-Api-Key": newsAI_key}
     url = "https://newsapi.org/v2/everything"
@@ -46,10 +44,10 @@ class SubjectProvider(BaseModel):
     subject: list[str]
 
 
-def subject_provider(kaiwa, news=""):
+def subject_provider(OPENAI_API_KEY,kaiwa, news=""):
     data = kaiwa + "," + news
     # dataが会話内容、subjectが話題の配列です。5つの話題を提供します。
-    client = OpenAI()
+    client = OpenAI(api_key=OPENAI_API_KEY)
     # apikeyを入力
     completion = client.beta.chat.completions.parse(
         model="gpt-4o-mini-2024-07-18",
@@ -68,11 +66,11 @@ def subject_provider(kaiwa, news=""):
     return json_data
 
 
-def subject_sum(data):
+def subject_sum(data,OPENAI_API_KEY):
     # print('話題関数はじめ')
 
     # dataが会話内内、会話内容の要約を返します
-    client = OpenAI()
+    client = OpenAI(api_key=OPENAI_API_KEY)
     # apikeyを入力
     completion = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
@@ -89,21 +87,25 @@ def subject_sum(data):
     return completion.choices[0].message.content
 
 
-def voice_recognition_func(talk_data):
+def voice_recognition_func(talk_data,OPENAI_API_KEY,newsAI_key):
     # 会話データを入力
-    pro = subject_sum(talk_data)
+    pro = subject_sum(talk_data,OPENAI_API_KEY)
     # 会話の内容を検索プロンプトに変更
     print(pro)
-    news_recent = news_sum(kensaku=pro)
+    news_recent = news_sum(newsAI_key,kensaku=pro)
     # プロンプトを使って最新のニュース記事を要約して、テキストデータに変換
-    list = subject_provider(kaiwa=talk_data, news=news_recent)
+    list = subject_provider(OPENAI_API_KEY,kaiwa=talk_data, news=news_recent)
     # ニュース記事と会話内容を踏まえて、楽しそうな話題をリスト化
 
     return list
 
 
 if __name__ == "__main__":
+    load_dotenv()
     talk_data = (
         "私は、東京都在住の大学生です。趣味は読書で、最近は小説をよく読んでいます。"
     )
-    voice_recognition_func(talk_data)
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # TODO: テストの際には.envファイルにAPIキーを記述
+    newsAI_key = os.getenv("SEARCH_API_KEY") #NOET: SEARCH_API_KEYはなくても動作します
+
+    voice_recognition_func(talk_data,OPENAI_API_KEY,newsAI_key)

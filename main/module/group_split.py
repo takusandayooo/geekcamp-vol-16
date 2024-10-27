@@ -21,13 +21,13 @@ class _IntroductionList(BaseModel):
     introductions: list[Introduction]
 
 
-def split_groups_by(intros: list[Introduction]) -> list[Group] | None:
+def split_groups_by(intros: list[Introduction],OPENAI_API_KEY) -> list[Group] | None:
     if len(intros) == 0:
         return None
 
     intro_json: str = _IntroductionList(introductions=intros).model_dump_json()
 
-    client = OpenAI()
+    client = OpenAI(api_key=OPENAI_API_KEY)
     response = client.beta.chat.completions.parse(
         model="gpt-4o-mini-2024-07-18",
         response_format=_GroupList,

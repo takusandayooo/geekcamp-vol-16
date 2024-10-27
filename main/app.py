@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from flask import Flask, abort, jsonify, render_template, request
 from module.follow_up import AI_follow_up_questions
+import os
 from module.group_split import (
     Group,
     Introduction,
@@ -10,6 +11,9 @@ from module.recognition_main import voice_recognition_func
 from pydantic import ValidationError
 
 load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") #TODO: 本番環境にデプロイする際にはここをコメントアウト
+SEARCH_API_KEY = os.getenv("SEARCH_API_KEY")
 
 app = Flask(__name__)
 
@@ -24,7 +28,7 @@ def follow_up():
     if request.method == "POST":
         data = request.get_json()
         print(data)
-        result = AI_follow_up_questions(data["result"])
+        result = AI_follow_up_questions(data["result"],OPENAI_API_KEY)
         print(result)
         return jsonify({"status": "success", "result": result})
     else:
@@ -44,7 +48,7 @@ def table():
                 500, "サーバー内で問題が生じました。時間を空けてから実行してください。"
             )
 
-        groups: list[Group] | None = split_groups_by(intros)
+        groups: list[Group] | None = split_groups_by(intros,OPENAI_API_KEY)
         if groups is None:
             return jsonify({"result": []})
 
@@ -59,7 +63,7 @@ def voice_recognition():
     else:
         data = request.get_json()
         print(data["result"])
-        result = voice_recognition_func(data["result"])
+        result = voice_recognition_func(data["result"],OPENAI_API_KEY,SEARCH_API_KEY)
         return jsonify({"status": "success", "result": result})
 
 

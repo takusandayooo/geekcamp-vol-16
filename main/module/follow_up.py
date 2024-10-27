@@ -1,6 +1,8 @@
 from openai import OpenAI
 from pydantic import BaseModel
 import json
+from dotenv import load_dotenv
+import os
 
 
 class FollowUpQuestions(BaseModel):
@@ -8,8 +10,8 @@ class FollowUpQuestions(BaseModel):
 
 
 # NOTE:自己紹介してもらった内容から、追加の質問があった場合に返答する関数
-def AI_follow_up_questions(chat):
-    client = OpenAI()
+def AI_follow_up_questions(chat,OPENAI_API_KEY):
+    client = OpenAI(api_key=OPENAI_API_KEY)
     system_prompt = """
         あなたは、ユーザーの自己紹介をもとに追加質問を生成するアシスタントです。ユーザーの自己紹介が不十分な場合、関連する情報を補完するための一般的な質問を以下の形式で提示してください。質問が不要な場合は「false」を返してください。
 
@@ -37,5 +39,7 @@ def AI_follow_up_questions(chat):
 
 
 if __name__ == "__main__":
+    load_dotenv()
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")#TODO: テストの際には.envファイルにAPIキーを記述
     chat = "私は、東京都在住の大学生です。趣味は読書で、最近は小説をよく読んでいます。"
-    print(AI_follow_up_questions(chat))
+    print(AI_follow_up_questions(chat,OPENAI_API_KEY))
