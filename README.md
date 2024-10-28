@@ -1,5 +1,7 @@
 # 飲みコネクト
 
+![nomi_connect_top](https://github.com/user-attachments/assets/d7eb1552-82a1-4d44-9fab-4b55eae5d811)
+
 ## 開発方法
 
 ### セットアップ
